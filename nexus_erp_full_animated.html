@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>Nexus Faculty Lifecycle</title>
+<style>
+:root{--blue:#00a9e0;--blue2:#0075c9;--navy:#102a43;--ink:#172b4d;--muted:#6b7c93;--bg:#f5f8fc;--card:#fff;--line:#e7edf4;--green:#20b26b;--orange:#ff9f43;--red:#ef5350;--shadow:0 8px 28px rgba(16,42,67,.07)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--ink)}
+button,input,select{font:inherit}.app{display:flex;min-height:100vh}
+.side{width:248px;background:#fff;border-right:1px solid var(--line);position:fixed;inset:0 auto 0 0;padding:18px 14px;z-index:10}.brand{display:flex;align-items:center;gap:10px;padding:10px 12px 25px;font-size:20px;font-weight:800}.logo{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,var(--blue),var(--blue2));display:grid;place-items:center;color:#fff;font-weight:900;box-shadow:0 7px 15px #00a9e033}.brand span{color:var(--blue2)}
+.nav button{display:flex;gap:12px;align-items:center;width:100%;border:0;background:transparent;color:#6b7c93;text-align:left;padding:13px 14px;border-radius:11px;margin:4px 0;cursor:pointer;font-weight:650}.nav button.active,.nav button:hover{background:#eaf8fd;color:var(--blue2)}.nav .ico{width:24px;text-align:center;font-size:17px}.sidefoot{position:absolute;bottom:20px;left:24px;right:20px;color:#9aa9b8;font-size:11px;line-height:1.5}
+.main{margin-left:248px;width:calc(100% - 248px);padding:25px 30px 45px;max-width:1500px}.topbar{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:22px}.title h1{margin:0;font-size:27px;letter-spacing:-.4px}.title p{margin:6px 0 0;color:var(--muted);font-size:13px}.user{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--line);padding:8px 11px;border-radius:12px}.avatar{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:#dff6ff;color:#0075c9;font-weight:800}
+.page{display:none}.page.active{display:block}.hero{background:linear-gradient(110deg,#0075c9,#00a9e0);color:#fff;border-radius:18px;padding:23px;box-shadow:var(--shadow);position:relative;overflow:hidden}.hero:after{content:"";position:absolute;width:230px;height:230px;border-radius:50%;right:-80px;top:-120px;border:35px solid #ffffff22}.hero h2{margin:0 0 7px;font-size:21px}.hero p{margin:0;max-width:700px;color:#e6f8ff;font-size:13px}.hero .hero-actions{margin-top:18px;display:flex;gap:9px;flex-wrap:wrap}.whitebtn{border:0;border-radius:9px;padding:10px 14px;background:#fff;color:#0075c9;font-weight:800;cursor:pointer}.ghostbtn{border:1px solid #ffffff55;border-radius:9px;padding:10px 14px;background:#ffffff15;color:#fff;font-weight:700;cursor:pointer}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:16px 0}.card{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:17px;box-shadow:var(--shadow)}.metric-card{position:relative;min-height:122px}.metric-card .miniicon{position:absolute;right:15px;top:15px;width:38px;height:38px;border-radius:10px;background:#eaf8fd;color:var(--blue2);display:grid;place-items:center}.muted{color:var(--muted);font-size:12px}.num{font-size:28px;font-weight:850;margin:8px 0 4px}.delta{font-size:11px;color:var(--green);font-weight:700}.section-title{display:flex;justify-content:space-between;align-items:center;margin:20px 0 10px}.section-title h2{margin:0;font-size:17px}.section-title span{font-size:11px;color:var(--muted)}
+.two{display:grid;grid-template-columns:1.15fr .85fr;gap:15px}.three{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.barrow{display:grid;grid-template-columns:105px 1fr 44px;gap:10px;align-items:center;margin:15px 0;font-size:12px}.bar{height:9px;background:#edf2f7;border-radius:99px;overflow:hidden}.fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--blue2),var(--blue))}.fill.red{background:var(--red)}.fill.orange{background:var(--orange)}
+.status{padding:4px 8px;border-radius:999px;font-size:10px;font-weight:800;display:inline-block}.ok{background:#e5f8ef;color:#12804c}.warn{background:#fff3df;color:#a65a00}.bad{background:#ffebeb;color:#b83232}
+.btn{border:0;border-radius:9px;padding:10px 14px;background:linear-gradient(135deg,var(--blue2),var(--blue));color:#fff;font-weight:800;cursor:pointer;box-shadow:0 6px 14px #0075c922}.btn.secondary{background:#eaf8fd;color:#0075c9;box-shadow:none}.btn:active{transform:translateY(1px)}
+.insight{display:flex;gap:10px;padding:12px;border:1px solid #e3edf5;background:#f8fbfe;border-radius:11px;margin:9px 0}.insight .dot{width:9px;height:9px;border-radius:50%;background:var(--blue);margin-top:5px;flex:none}.insight b{font-size:12px}.insight small{color:var(--muted);line-height:1.45}
+table{width:100%;border-collapse:collapse}th,td{padding:12px 8px;border-bottom:1px solid #edf1f5;text-align:left;font-size:12px}th{font-size:10px;text-transform:uppercase;color:#8492a6;letter-spacing:.4px}
+.form{display:grid;grid-template-columns:1fr 1fr;gap:11px}.input{width:100%;padding:11px 12px;border:1px solid #dce5ee;border-radius:9px;outline:none;background:#fff}.input:focus{border-color:#72cceb;box-shadow:0 0 0 3px #00a9e01a}.full{grid-column:1/-1}.score{font-size:42px;font-weight:900;color:var(--blue2);line-height:1}.task{display:flex;gap:10px;align-items:center;padding:11px 0;border-bottom:1px solid #edf1f5;font-size:12px}.task input{accent-color:var(--blue2);width:17px;height:17px}.progress{height:9px;background:#edf2f7;border-radius:99px;overflow:hidden}.progress div{height:100%;background:linear-gradient(90deg,var(--blue2),var(--blue));border-radius:99px}
+.kpi{display:flex;justify-content:space-between;align-items:center}.circle{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;background:#eaf8fd;color:var(--blue2);font-weight:900;font-size:12px}.timeline{border-left:2px solid #dcecf3;margin:8px 0 0 8px;padding-left:18px}.tl{position:relative;margin:0 0 17px}.tl:before{content:"";position:absolute;left:-25px;top:3px;width:10px;height:10px;border-radius:50%;background:var(--blue)}.tl b{font-size:12px}.tl small{display:block;color:var(--muted);margin-top:3px}
+.toast{position:fixed;right:22px;bottom:22px;background:#102a43;color:#fff;padding:12px 15px;border-radius:10px;display:none;z-index:30;font-size:12px;box-shadow:var(--shadow)}
+.mobilebar{display:none}
+@media(max-width:850px){.side{display:none}.main{margin:0;width:100%;padding:15px 15px 80px}.topbar{margin-bottom:15px}.user{display:none}.title h1{font-size:22px}.cards{grid-template-columns:1fr 1fr;gap:10px}.two,.three{grid-template-columns:1fr}.hero{padding:18px}.hero h2{font-size:18px}.mobilebar{display:flex;position:fixed;bottom:0;left:0;right:0;height:64px;background:#fff;border-top:1px solid var(--line);z-index:20;justify-content:space-around;box-shadow:0 -4px 18px #102a430d}.mobilebar button{border:0;background:none;color:#7b8a9c;font-size:10px;font-weight:700}.mobilebar button.active{color:var(--blue2)}.mobilebar i{font-style:normal;font-size:18px;display:block;margin-bottom:2px}.form{grid-template-columns:1fr}.full{grid-column:auto}table{min-width:560px}.tablewrap{overflow:auto}.metric-card{min-height:112px}}
+
+/* ===== Learnathon-inspired motion system ===== */
+:root{--ease:cubic-bezier(.16,1,.3,1)}
+body{overflow-x:hidden}
+body:before,body:after{content:"";position:fixed;z-index:-1;border-radius:50%;filter:blur(55px);opacity:.16;pointer-events:none}
+body:before{width:320px;height:320px;background:var(--blue);top:-100px;right:-80px;animation:floatGlow 12s ease-in-out infinite alternate}
+body:after{width:260px;height:260px;background:#6d5dfc;bottom:-100px;left:180px;animation:floatGlow 15s ease-in-out infinite alternate-reverse}
+@keyframes floatGlow{to{transform:translate(45px,65px) scale(1.18)}}
+.logo{animation:nexusPulse 3.5s ease-in-out infinite;position:relative}
+.logo:after{content:"";position:absolute;inset:-7px;border:1px solid #00a9e055;border-radius:16px;animation:orbitRing 4s linear infinite}
+@keyframes nexusPulse{50%{transform:translateY(-3px) rotate(-3deg);box-shadow:0 14px 28px #00a9e055}}
+@keyframes orbitRing{to{transform:rotate(360deg)}}
+.page.active{animation:pageEnter .6s var(--ease) both}
+@keyframes pageEnter{from{opacity:0;transform:translateY(14px) scale(.99)}to{opacity:1;transform:none}}
+.hero{isolation:isolate;animation:heroIn .7s var(--ease) both}
+.hero:before{content:"";position:absolute;inset:-80%;z-index:-1;background:linear-gradient(105deg,transparent 42%,#ffffff22 50%,transparent 58%);transform:translateX(-35%);animation:heroSheen 7s ease-in-out infinite}
+@keyframes heroIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+@keyframes heroSheen{50%,100%{transform:translateX(35%)}}
+.card{transition:transform .35s var(--ease),box-shadow .35s var(--ease),border-color .35s ease;animation:cardIn .55s var(--ease) both}
+.cards .card:nth-child(2){animation-delay:.06s}.cards .card:nth-child(3){animation-delay:.12s}.cards .card:nth-child(4){animation-delay:.18s}
+@keyframes cardIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.card:hover{transform:translateY(-5px);box-shadow:0 18px 42px rgba(16,42,67,.13);border-color:#bde8f7}
+.btn,.whitebtn,.ghostbtn{transition:transform .25s var(--ease),box-shadow .25s ease,filter .25s ease}
+.btn:hover,.whitebtn:hover,.ghostbtn:hover{transform:translateY(-2px);filter:brightness(1.03)}
+.fill,.progress div{transition:width 1.1s var(--ease)}
+.page.active .fill{animation:barGrow 1.1s var(--ease) both}
+@keyframes barGrow{from{width:0!important}}
+.insight{transition:transform .3s var(--ease),background .3s ease;animation:insightIn .5s var(--ease) both}
+.insight:nth-child(2){animation-delay:.08s}.insight:nth-child(3){animation-delay:.16s}
+.insight:hover{transform:translateX(5px);background:#fff}
+@keyframes insightIn{from{opacity:0;transform:translateX(-10px)}to{opacity:1;transform:none}}
+.circle{transition:transform .5s var(--ease);animation:circlePop .7s var(--ease) both}
+.circle:hover{transform:rotate(10deg) scale(1.08)}
+@keyframes circlePop{from{transform:scale(.6);opacity:0}to{transform:scale(1);opacity:1}}
+.reassign{animation:reassignPulse 1.2s var(--ease) both;background:#e5f8ef!important}
+@keyframes reassignPulse{0%{transform:translateX(-12px);opacity:.2}55%{transform:translateX(4px)}100%{transform:none;opacity:1}}
+.counter-pop{animation:counterPop .45s var(--ease)}
+@keyframes counterPop{50%{transform:scale(1.08);color:var(--blue2)}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+@media(max-width:850px){.page.active{animation-duration:.4s}.card:hover{transform:none}.hero:before{display:none}.sidefoot{display:none}}
+
+
+/* ===== Interactive cursor glow / light trail ===== */
+body{background:#05070d!important;color:#eaf4ff;background-image:radial-gradient(circle at 50% -20%,#10213a 0,transparent 38%),radial-gradient(circle at 80% 30%,#071b2d 0,transparent 30%)!important}
+#cursorTrail{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:9999;mix-blend-mode:screen}
+.app{position:relative;z-index:1}.side,.mobilebar{background:rgba(8,13,23,.88)!important;backdrop-filter:blur(16px);border-color:rgba(120,180,255,.12)!important}.main{position:relative}.card,.user{background:rgba(12,20,33,.78)!important;border-color:rgba(120,180,255,.13)!important;box-shadow:0 12px 36px rgba(0,0,0,.28)!important}.muted,.title p,.sidefoot{color:#91a4ba!important}.nav button{color:#9eafc4}.nav button.active,.nav button:hover{background:rgba(0,169,224,.12)!important}.hero{box-shadow:0 18px 55px rgba(0,117,201,.2)!important}.bar,.progress{background:#152130!important}.insight{background:rgba(12,25,40,.72)!important;border-color:rgba(120,180,255,.12)!important}.input{background:#0b1421!important;color:#eaf4ff!important;border-color:#203149!important}th,td,.task{border-color:rgba(140,170,205,.1)!important}
+@media(prefers-reduced-motion:reduce){#cursorTrail{display:none}}
+
+
+/* ===== Admin ERP enhancement layer ===== */
+body[data-theme="light"]{--bg:#f5f8fc;--card:#fff;--ink:#172b4d;--muted:#6b7c93;--line:#e7edf4}
+body[data-theme="light"]{background:var(--bg)!important;color:var(--ink)!important}
+body[data-theme="light"] .side,body[data-theme="light"] .mobilebar{background:rgba(255,255,255,.9)!important}
+body[data-theme="light"] .card,body[data-theme="light"] .user{background:rgba(255,255,255,.92)!important;color:var(--ink)}
+body[data-theme="light"] .muted,body[data-theme="light"] .title p,body[data-theme="light"] .sidefoot{color:#6b7c93!important}
+body[data-theme="light"] .nav button{color:#6b7c93}
+body[data-theme="light"] .insight{background:#f8fbfe!important}
+body[data-theme="light"] .input{background:#fff!important;color:#172b4d!important;border-color:#dce5ee!important}
+.theme-toggle{border:1px solid var(--line);background:rgba(255,255,255,.08);color:inherit;border-radius:999px;padding:8px 12px;cursor:pointer;transition:.3s;white-space:nowrap}
+.theme-toggle:hover{transform:translateY(-2px);box-shadow:0 0 22px #00a9e044}
+.action-btn{border:0;border-radius:8px;padding:7px 10px;cursor:pointer;font-weight:800;margin-right:4px;background:#16304a;color:#cdeeff}
+.action-btn.danger{background:#3b1820;color:#ff9d9d}.action-btn.edit{background:#092c42;color:#7fe1ff}
+.toolbar{display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin-bottom:12px}.toolbar .input{max-width:260px}
+.modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.65);backdrop-filter:blur(7px);display:none;align-items:center;justify-content:center;z-index:10001;padding:18px}
+.modal-backdrop.open{display:flex;animation:fadeIn .25s both}
+.modal{width:min(620px,100%);max-height:88vh;overflow:auto;background:#0c1421;border:1px solid rgba(110,200,255,.2);border-radius:20px;padding:22px;box-shadow:0 30px 90px #0009}
+body[data-theme="light"] .modal{background:#fff;color:#172b4d}.modal h2{margin:0 0 14px}.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:15px}.danger-zone{border:1px solid rgba(239,83,80,.45)!important}.danger-zone h3{color:#ff8f8f}
+.perf-row{margin:15px 0}.perf-head{display:flex;justify-content:space-between;font-size:12px;margin-bottom:7px}.perf-bar{height:11px;border-radius:99px;background:#172536;overflow:hidden}.perf-bar i{display:block;height:100%;width:0;border-radius:inherit;background:linear-gradient(90deg,#0075c9,#00d2ff);transition:width 1.2s var(--ease);box-shadow:0 0 16px #00a9e077}
+.star-rating{display:flex;gap:8px;font-size:30px}.star-rating button{background:none;border:0;color:#496174;cursor:pointer;padding:0}.star-rating button.active{color:#ffd166;filter:drop-shadow(0 0 8px #ffd16666)}
+.login-screen{position:fixed;inset:0;z-index:10000;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 10%,#102b4b 0,#05070d 55%);padding:20px}.login-box{width:min(430px,100%);padding:32px;border-radius:24px;background:rgba(10,18,30,.78);border:1px solid rgba(100,210,255,.18);box-shadow:0 30px 100px #0009;backdrop-filter:blur(18px);text-align:center}.login-logo{margin:auto auto 15px;width:64px;height:64px;font-size:26px}.login-box .input{text-align:left;margin:7px 0}.login-box .btn{width:100%;margin-top:12px}
+.hidden{display:none!important}.feedback-summary{font-size:12px;color:var(--muted);margin-top:8px}.data-note{font-size:11px;color:var(--muted)}
+@media(max-width:850px){.toolbar .input{max-width:none;flex:1 1 100%}.topbar{align-items:flex-start}.theme-toggle{padding:7px 9px}.mobilebar button:nth-child(n+6){display:none}}
+
+</style>
+</head>
+<body>
+<canvas id="cursorTrail" aria-hidden="true"></canvas>
+<div class="app">
+<aside class="side">
+<div class="brand"><div class="logo">N</div><div>Nexus <span>Faculty</span></div></div>
+<div class="nav">
+<button class="active" onclick="show('dashboard',this)"><span class="ico">⌂</span>Overview</button>
+<button onclick="show('recruit',this)"><span class="ico">♙</span>Recruitment</button>
+<button onclick="show('onboard',this)"><span class="ico">✓</span>Onboarding</button>
+<button onclick="show('workload',this)"><span class="ico">⚖</span>Advisor Workload</button>
+<button onclick="show('performance',this)"><span class="ico">▥</span>Performance</button>
+<button onclick="show('teachers',this)"><span class="ico">👨‍🏫</span>Teachers</button>
+<button onclick="show('feedback',this)"><span class="ico">💬</span>Feedback</button>
+<button onclick="show('settings',this)"><span class="ico">⚙</span>Settings</button>
+</div>
+<div class="sidefoot">NEXUS FACULTY LIFECYCLE<br>Learnathon MVP · Demo environment</div>
+</aside>
+
+<main class="main">
+<div class="topbar"><div class="title"><h1 id="pageTitle">Faculty Lifecycle Command Center</h1><p>Smart operations for digital-first universities</p></div><button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">☀️ Light</button><div class="user"><div class="avatar">AD</div><div><b style="font-size:12px">Admin</b><div class="muted">University Operations</div></div></div></div>
+
+<section id="dashboard" class="page active">
+<div class="hero"><h2>Good afternoon, Admin 👋</h2><p>One place to recruit, onboard, balance advisor workloads and improve faculty performance.</p><div class="hero-actions"><button class="whitebtn" onclick="show('workload')">⚡ Optimize workload</button><button class="ghostbtn" onclick="show('recruit')">+ Add candidate</button></div></div>
+<div class="cards">
+<div class="card metric-card"><div class="miniicon">♙</div><div class="muted">Total Faculty</div><div class="num">126</div><div class="delta">↑ 8 this semester</div></div>
+<div class="card metric-card"><div class="miniicon">◎</div><div class="muted">Students</div><div class="num">2,048</div><div class="muted">6 departments</div></div>
+<div class="card metric-card"><div class="miniicon">⚖</div><div class="muted">Advisors</div><div class="num">34</div><div class="muted">Ratio 1 : 60</div></div>
+<div class="card metric-card"><div class="miniicon">↗</div><div class="muted">Faculty Retention</div><div class="num">91%</div><div class="delta">↑ 5% vs last year</div></div>
+</div>
+<div class="section-title"><h2>Today's operational view</h2><span>Live demo data</span></div>
+<div class="two">
+<div class="card"><div class="kpi"><div><h3 style="margin:0 0 3px;font-size:15px">Advisor workload</h3><span class="muted">5 advisors need attention</span></div><button class="btn secondary" onclick="show('workload')">View all</button></div>
+<div class="barrow"><span>R. Sharma</span><div class="bar"><div class="fill red" style="width:96%"></div></div><b>142</b></div>
+<div class="barrow"><span>P. Das</span><div class="bar"><div class="fill orange" style="width:79%"></div></div><b>118</b></div>
+<div class="barrow"><span>A. Khan</span><div class="bar"><div class="fill" style="width:65%"></div></div><b>97</b></div>
+<div class="barrow"><span>S. Rao</span><div class="bar"><div class="fill" style="width:44%"></div></div><b>65</b></div></div>
+<div class="card"><h3 style="margin:0 0 12px;font-size:15px">AI Operations Insights</h3>
+<div class="insight"><div class="dot"></div><div><b>Overload detected</b><br><small>R. Sharma is at 96% capacity. Rebalancing is recommended.</small></div></div>
+<div class="insight"><div class="dot" style="background:var(--green)"></div><div><b>Onboarding on track</b><br><small>87% of new faculty have completed their onboarding.</small></div></div>
+<div class="insight"><div class="dot" style="background:var(--orange)"></div><div><b>Student outcomes</b><br><small>Course completion is up 8% this term.</small></div></div>
+</div></div>
+<div class="section-title"><h2>Lifecycle KPIs</h2></div>
+<div class="three">
+<div class="card kpi"><div><div class="muted">Onboarding completion</div><div class="num">87%</div></div><div class="circle">87%</div></div>
+<div class="card kpi"><div><div class="muted">Student satisfaction</div><div class="num">4.3/5</div></div><div class="circle">4.3</div></div>
+<div class="card kpi"><div><div class="muted">Avg. student score</div><div class="num">78%</div></div><div class="circle">78</div></div>
+</div>
+</section>
+
+<section id="recruit" class="page">
+<div class="hero"><h2>Faculty Recruitment Hub</h2><p>Screen fictional candidates consistently using transparent, AI-assisted matching.</p></div>
+<div class="two" style="margin-top:15px"><div class="card"><h3 style="margin-top:0">Add candidate</h3><div class="form"><input id="n" class="input" placeholder="Candidate name"><input id="e" class="input" type="number" placeholder="Years of experience"><select id="q" class="input"><option>M.Tech / PhD</option><option>B.Tech</option><option>M.Sc / PhD</option></select><input id="s" class="input" placeholder="Subjects: VLSI, IoT"><input id="l" class="input full" placeholder="Languages: English, Hindi"><button class="btn full" onclick="match()">Run candidate match →</button></div></div>
+<div class="card"><h3 style="margin-top:0">Match assessment</h3><div id="match"><div class="muted">Candidate match score will appear here.</div></div></div></div>
+<div class="card"><div class="kpi"><h3 style="margin-top:0">Candidate Management</h3><button class="btn secondary" onclick="clearCandidates()">Clear candidates</button></div><div class="tablewrap"><table id="candidateTable"></table></div></div>
+</section>
+
+<section id="onboard" class="page">
+<div class="hero"><h2>Faculty Onboarding</h2><p>Personalized onboarding with progress, language preference and next-best actions.</p></div>
+<div class="two" style="margin-top:15px"><div class="card"><div class="kpi"><div><h3 style="margin:0">Dr. Ananya Mehta</h3><span class="muted">ECE · New faculty</span></div><div id="prog" class="score" style="font-size:27px">56%</div></div><div class="progress" style="margin:14px 0"><div id="pbar" style="width:56%"></div></div><div id="tasks"></div></div>
+<div class="card"><h3 style="margin-top:0">Onboarding journey</h3><div class="timeline"><div class="tl"><b>Profile created</b><small>Completed · Today</small></div><div class="tl"><b>HR verification</b><small>Completed · Today</small></div><div class="tl"><b>LMS training</b><small>Next action · This week</small></div><div class="tl"><b>Course assignment</b><small>Pending · After LMS training</small></div></div><hr style="border:0;border-top:1px solid var(--line);margin:18px 0"><label class="muted">Preferred language</label><select class="input" style="margin-top:6px"><option>English</option><option>Hindi</option><option>Odia</option><option>Telugu</option></select></div></div>
+</section>
+
+<section id="workload" class="page">
+<div class="hero"><h2>Smart Advisor Workload</h2><p>Capacity-aware allocation helps prevent advisor overload and improves consistency of student support.</p><div class="hero-actions"><button class="whitebtn" onclick="optimize()">⚡ Run optimization</button></div></div>
+<div class="card" style="margin-top:15px"><div class="tablewrap"><table id="wt"></table></div><div id="res"></div></div>
+</section>
+
+<section id="performance" class="page">
+<div class="hero"><h2>Faculty Performance & Outcomes</h2><p>Connect faculty activity with student outcomes to surface actionable support opportunities.</p></div>
+<div class="cards"><div class="card metric-card"><div class="muted">Attendance</div><div class="num">91%</div><div class="delta">↑ 3% this month</div></div><div class="card metric-card"><div class="muted">Course completion</div><div class="num">94%</div><div class="delta">↑ 8% this term</div></div><div class="card metric-card"><div class="muted">Satisfaction</div><div class="num">4.3/5</div><div class="muted">2,048 responses</div></div><div class="card metric-card"><div class="muted">Performance score</div><div class="num">89/100</div><div class="delta">Healthy</div></div></div>
+<div class="two"><div class="card"><h3 style="margin-top:0">Faculty outcome scorecard</h3><div class="tablewrap"><table><tr><th>Faculty</th><th>Student score</th><th>Completion</th><th>Score</th></tr><tr><td>Dr. Mehta</td><td>84%</td><td>96%</td><td><b>92</b></td></tr><tr><td>Dr. Rao</td><td>78%</td><td>94%</td><td><b>89</b></td></tr><tr><td>Dr. Khan</td><td>71%</td><td>88%</td><td><b>81</b></td></tr></table></div></div><div class="card"><h3 style="margin-top:0">AI action center</h3><div class="insight"><div class="dot" style="background:var(--orange)"></div><div><b>Engagement opportunity</b><br><small>Section B assignment completion is 12% below its department average.</small></div></div><button class="btn secondary" onclick="toast('Action plan created for review')">Create action plan</button></div></div>
+</section>
+
+<section id="teachers" class="page">
+ <div class="hero"><h2>Teacher Management</h2><p>Add, edit, archive or permanently remove faculty while tracking performance from student feedback.</p><div class="hero-actions"><button class="whitebtn" onclick="openTeacherModal()">+ Add Teacher</button></div></div>
+ <div class="card" style="margin-top:15px"><div class="toolbar"><input class="input" id="teacherSearch" placeholder="🔍 Search teacher..." oninput="renderTeachers()"><select class="input" id="deptFilter" onchange="renderTeachers()"><option value="">All departments</option><option>ECE</option><option>CSE</option><option>Mechanical</option></select></div><div class="tablewrap"><table id="teacherTable"></table></div></div>
+</section>
+<section id="feedback" class="page">
+ <div class="hero"><h2>Faculty Feedback Portal</h2><p>Collect structured student reviews and automatically update teacher performance insights.</p></div>
+ <div class="two" style="margin-top:15px"><div class="card"><h3 style="margin-top:0">Submit Feedback</h3><select id="feedbackTeacher" class="input"></select><label class="muted">Teaching quality</label><div class="star-rating" data-rate="teaching"></div><label class="muted">Communication</label><div class="star-rating" data-rate="communication"></div><label class="muted">Subject knowledge</label><div class="star-rating" data-rate="knowledge"></div><label class="muted">Student engagement</label><div class="star-rating" data-rate="engagement"></div><textarea id="feedbackComment" class="input" style="height:90px;margin-top:12px" placeholder="Optional feedback comment"></textarea><button class="btn" style="margin-top:12px" onclick="submitFeedback()">Submit feedback</button></div>
+ <div class="card"><h3 style="margin-top:0">Review Insights</h3><div id="feedbackInsights" class="muted">Select and review faculty feedback trends.</div></div></div>
+</section>
+<section id="settings" class="page">
+ <div class="hero"><h2>Admin Settings & Data Control</h2><p>Manage your local demo data and appearance preferences.</p></div>
+ <div class="two" style="margin-top:15px"><div class="card"><h3>Appearance</h3><p class="muted">Switch between the clean institutional theme and futuristic glow mode.</p><button class="btn" onclick="toggleTheme()">Toggle Light / Dark Mode</button><hr style="border:0;border-top:1px solid var(--line);margin:20px 0"><h3>Data Backup</h3><button class="btn secondary" onclick="exportData()">Export JSON Backup</button></div>
+ <div class="card danger-zone"><h3>⚠ Danger Zone</h3><p class="muted">These actions affect locally stored prototype data. Permanent deletion cannot be undone.</p><button class="action-btn danger" onclick="clearTeachers()">Delete All Teachers</button><button class="action-btn danger" onclick="clearCandidates()">Delete All Candidates</button><button class="action-btn danger" onclick="clearFeedback()">Reset Feedback</button><button class="action-btn danger" onclick="resetAll()">Reset Entire Demo</button></div></div>
+</section>
+</main></div>
+
+<div class="mobilebar">
+<button class="active" onclick="show('dashboard',this)"><i>⌂</i>Home</button>
+<button onclick="show('recruit',this)"><i>♙</i>Recruit</button>
+<button onclick="show('onboard',this)"><i>✓</i>Onboard</button>
+<button onclick="show('workload',this)"><i>⚖</i>Workload</button>
+<button onclick="show('performance',this)"><i>▥</i>Insights</button>
+</div>
+
+<div id="teacherModal" class="modal-backdrop"><div class="modal"><h2 id="teacherModalTitle">Add Teacher</h2><div class="form"><input id="tName" class="input" placeholder="Full name"><input id="tId" class="input" placeholder="Employee ID"><select id="tDept" class="input"><option>ECE</option><option>CSE</option><option>Mechanical</option></select><input id="tEmail" class="input" placeholder="Email"><input id="tExp" class="input" type="number" placeholder="Experience (years)"><input id="tSubjects" class="input" placeholder="Subjects"></div><div class="modal-actions"><button class="btn secondary" onclick="closeTeacherModal()">Cancel</button><button class="btn" onclick="saveTeacher()">Save Teacher</button></div></div></div>
+<div id="loginScreen" class="login-screen"><div class="login-box"><div class="logo login-logo">N</div><h2>Nexus ERP</h2><p class="muted">Faculty Lifecycle Administration</p><input id="loginUser" class="input" placeholder="Username" value="admin"><input id="loginPass" class="input" type="password" placeholder="Password" value="admin123"><select id="loginRole" class="input"><option>Administrator</option><option>Teacher</option><option>Student</option></select><button class="btn" onclick="login()">Login Securely →</button><p class="data-note">Prototype demo credentials: admin / admin123</p></div></div>
+<div id="toast" class="toast"></div>
+<script>
+const titles={dashboard:'Faculty Lifecycle Command Center',recruit:'Faculty Recruitment',onboard:'Faculty Onboarding',workload:'Smart Advisor Workload',performance:'Faculty Performance'};
+function show(id,el){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');document.getElementById('pageTitle').textContent=titles[id];document.querySelectorAll('.nav button,.mobilebar button').forEach(x=>x.classList.remove('active'));if(el)el.classList.add('active');window.scrollTo(0,0)}
+function match(){let n=document.getElementById('n').value||'Demo Candidate',e=+document.getElementById('e').value||0,s=document.getElementById('s').value,l=document.getElementById('l').value,q=document.getElementById('q').value;let score=Math.min(98,55+e*5+(q.includes('PhD')?16:10)+(s?10:0)+(l?7:0));document.getElementById('match').innerHTML='<div class="score">'+score+'%</div><p><b>'+n+'</b></p><div class="muted">Qualification ✓ · Experience '+(e>=3?'✓':'△')+' · Subjects '+(s?'✓':'△')+' · Languages '+(l?'✓':'△')+'</div><p><span class="status '+(score>=85?'ok':'warn')+'">'+(score>=85?'SHORTLIST':'REVIEW')+'</span></p>';toast('Candidate match generated')}
+const taskNames=['HR registration','Identity verification','University account','LMS training','Academic policy orientation','Department orientation','Course assignment','Student advising training','First-week feedback'];let done=5;document.getElementById('tasks').innerHTML=taskNames.map((t,i)=>'<label class="task"><input type="checkbox" '+(i<done?'checked':'')+' onchange="upd()"> '+t+'</label>').join('');function upd(){done=[...document.querySelectorAll('#tasks input')].filter(x=>x.checked).length;let p=Math.round(done/taskNames.length*100);document.getElementById('prog').textContent=p+'%';document.getElementById('pbar').style.width=p+'%'}
+let advisors=[['R. Sharma',142,150],['P. Das',118,150],['A. Khan',97,150],['S. Rao',65,150],['N. Patel',54,120]];
+function renderW(){document.getElementById('wt').innerHTML='<tr><th>Advisor</th><th>Students</th><th>Capacity</th><th>Load</th><th>Status</th></tr>'+advisors.map(a=>{let p=Math.round(a[1]/a[2]*100),st=p>90?'Overloaded':p>=70?'Balanced':'Available',cl=p>90?'bad':p>=70?'warn':'ok';return '<tr><td><b>'+a[0]+'</b></td><td>'+a[1]+'</td><td>'+a[2]+'</td><td>'+p+'%</td><td><span class="status '+cl+'">'+st.toUpperCase()+'</span></td></tr>'}).join('')}renderW();
+function optimize(){let moved=0;for(let i=0;i<advisors.length;i++){if(advisors[i][1]/advisors[i][2]>.9){for(let j=0;j<advisors.length && advisors[i][1]/advisors[i][2]>.85;j++){if(i===j)continue;let cap=advisors[j][2]-advisors[j][1],m=Math.min(Math.ceil(advisors[i][1]-advisors[i][2]*.85),Math.max(0,cap));if(m>0){advisors[i][1]-=m;advisors[j][1]+=m;moved+=m}}}}renderW();document.getElementById('res').innerHTML='<div class="insight" style="margin-top:15px"><div class="dot" style="background:var(--green)"></div><div><b>Optimization complete</b><br><small>'+moved+' students reassigned using a capacity-aware algorithm. The goal is to keep advisor load at or below 90% where capacity allows.</small></div></div>';toast('Workload optimized')}
+function toast(s){let t=document.getElementById('toast');t.textContent=s;t.style.display='block';setTimeout(()=>t.style.display='none',1800)}
+
+// ===== Motion enhancements =====
+const reduceMotion=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+function animateCounter(el,target,duration=900){
+  if(!el || reduceMotion)return;
+  const raw=el.textContent.trim(), suffix=raw.includes('%')?'%':raw.includes('/5')?'/5':'';
+  if(suffix==='/5') return;
+  const start=performance.now();
+  function tick(now){const progress=Math.min((now-start)/duration,1);const eased=1-Math.pow(1-progress,3);
+    el.textContent=Math.round(target*eased).toLocaleString()+suffix;
+    if(progress<1)requestAnimationFrame(tick); else {el.textContent=target.toLocaleString()+suffix;el.classList.add('counter-pop');setTimeout(()=>el.classList.remove('counter-pop'),500)}
+  } requestAnimationFrame(tick);
+}
+function runCounters(scope=document){
+  scope.querySelectorAll('.num').forEach(el=>{
+    if(el.dataset.animated)return; el.dataset.animated='1';
+    const txt=el.textContent.trim(), match=txt.match(/[\d.]+/);
+    if(match && !txt.includes('/5')) animateCounter(el,Number(match[0]));
+  });
+}
+const originalShow=show;
+show=function(id,el){originalShow(id,el);const page=document.getElementById(id);requestAnimationFrame(()=>{runCounters(page);page.querySelectorAll('.fill').forEach(b=>{const w=b.style.width;b.style.width='0';requestAnimationFrame(()=>b.style.width=w)});});}
+runCounters();
+
+const originalUpd=upd;
+upd=function(){
+  originalUpd();
+  const bar=document.getElementById('pbar'), score=document.getElementById('prog');
+  score.classList.remove('counter-pop');void score.offsetWidth;score.classList.add('counter-pop');
+  bar.animate([{transform:'scaleX(.85)',opacity:.7},{transform:'scaleX(1)',opacity:1}],{duration:450,easing:'cubic-bezier(.16,1,.3,1)'});
+};
+
+const originalOptimize=optimize;
+optimize=function(){
+  const before=advisors.map(a=>a[1]);
+  originalOptimize();
+  document.querySelectorAll('#wt tr').forEach((row,i)=>{if(i&&before[i-1]!==advisors[i-1][1])row.classList.add('reassign')});
+  const res=document.getElementById('res');
+  res.scrollIntoView({behavior:reduceMotion?'auto':'smooth',block:'nearest'});
+};
+
+
+// ===== Interactive cursor light trail =====
+(function(){
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches || !window.matchMedia('(pointer:fine)').matches) return;
+  const canvas=document.getElementById('cursorTrail');
+  const ctx=canvas.getContext('2d');
+  let w,h,dpr,points=[],mouse={x:-999,y:-999};
+  function resize(){dpr=Math.min(window.devicePixelRatio||1,2);w=innerWidth;h=innerHeight;canvas.width=w*dpr;canvas.height=h*dpr;canvas.style.width=w+'px';canvas.style.height=h+'px';ctx.setTransform(dpr,0,0,dpr,0,0)}
+  resize(); addEventListener('resize',resize);
+  addEventListener('pointermove',e=>{mouse.x=e.clientX;mouse.y=e.clientY;points.push({x:mouse.x,y:mouse.y,life:1,size:22+Math.random()*20});if(points.length>32)points.shift()},{passive:true});
+  function draw(){
+    ctx.clearRect(0,0,w,h);
+    for(let i=0;i<points.length;i++){
+      const p=points[i];p.life*=.91;p.size*=.985;
+      const g=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.size);
+      g.addColorStop(0,`rgba(90,210,255,${p.life*.32})`);
+      g.addColorStop(.35,`rgba(0,150,255,${p.life*.13})`);
+      g.addColorStop(1,'rgba(0,80,255,0)');
+      ctx.fillStyle=g;ctx.beginPath();ctx.arc(p.x,p.y,p.size,0,Math.PI*2);ctx.fill();
+    }
+    points=points.filter(p=>p.life>.025);
+    if(mouse.x>-100){const g=ctx.createRadialGradient(mouse.x,mouse.y,0,mouse.x,mouse.y,90);g.addColorStop(0,'rgba(180,245,255,.18)');g.addColorStop(.2,'rgba(60,180,255,.09)');g.addColorStop(1,'rgba(0,90,255,0)');ctx.fillStyle=g;ctx.beginPath();ctx.arc(mouse.x,mouse.y,90,0,Math.PI*2);ctx.fill();}
+    requestAnimationFrame(draw);
+  } draw();
+})();
+
+
+// ===== Functional Admin ERP data layer (LocalStorage prototype) =====
+const DBKEY='nexusERPDataV2';
+const defaults={
+ teachers:[
+  {id:'T001',name:'Dr. A. Mehta',department:'ECE',email:'mehta@nexus.edu',experience:8,subjects:'AI, Embedded Systems'},
+  {id:'T002',name:'Dr. K. Rao',department:'CSE',email:'rao@nexus.edu',experience:11,subjects:'Algorithms, Data Science'},
+  {id:'T003',name:'Dr. S. Khan',department:'ECE',email:'khan@nexus.edu',experience:6,subjects:'Communication Systems'}
+ ],
+ candidates:[
+  {id:'C1',name:'Dr. A. Mehta',department:'ECE',match:94},
+  {id:'C2',name:'Dr. K. Rao',department:'Computer Science',match:89},
+  {id:'C3',name:'Ms. P. Singh',department:'ECE',match:73}
+ ],
+ feedback:[]
+};
+let db=JSON.parse(localStorage.getItem(DBKEY)||'null')||structuredClone(defaults);
+function saveDB(){localStorage.setItem(DBKEY,JSON.stringify(db));renderAll();}
+function escapeHtml(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));}
+function perf(t){
+ const f=db.feedback.filter(x=>x.teacherId===t.id);
+ if(!f.length)return {overall:0,count:0,teaching:0,communication:0,knowledge:0,engagement:0};
+ const keys=['teaching','communication','knowledge','engagement'];let o={count:f.length};
+ keys.forEach(k=>o[k]=Math.round(f.reduce((a,x)=>a+(x[k]||0),0)/f.length*20));
+ o.overall=Math.round(keys.reduce((a,k)=>a+o[k],0)/4);return o;
+}
+function renderTeachers(){
+ const q=(document.getElementById('teacherSearch')?.value||'').toLowerCase(), d=document.getElementById('deptFilter')?.value||'';
+ const list=db.teachers.filter(t=>(!q||t.name.toLowerCase().includes(q)||t.id.toLowerCase().includes(q))&&(!d||t.department===d));
+ const el=document.getElementById('teacherTable');if(!el)return;
+ el.innerHTML='<tr><th>Teacher</th><th>Department</th><th>Performance</th><th>Reviews</th><th>Actions</th></tr>'+list.map(t=>{let p=perf(t);return `<tr><td><b>${escapeHtml(t.name)}</b><br><span class="muted">${escapeHtml(t.id)}</span></td><td>${escapeHtml(t.department)}</td><td><div class="perf-bar"><i style="width:${p.overall}%"></i></div><small>${p.count?p.overall+'%':'No reviews yet'}</small></td><td>${p.count}</td><td><button class="action-btn edit" onclick="editTeacher('${t.id}')">✏️</button><button class="action-btn danger" onclick="deleteTeacher('${t.id}')">🗑️</button></td></tr>`}).join('')||'<tr><td colspan="5" class="muted">No teachers found.</td></tr>';
+}
+let editingTeacher=null;
+function openTeacherModal(){editingTeacher=null;document.getElementById('teacherModalTitle').textContent='Add Teacher';['tName','tId','tEmail','tExp','tSubjects'].forEach(id=>document.getElementById(id).value='');document.getElementById('teacherModal').classList.add('open');}
+function closeTeacherModal(){document.getElementById('teacherModal').classList.remove('open')}
+function editTeacher(id){const t=db.teachers.find(x=>x.id===id);if(!t)return;editingTeacher=id;document.getElementById('teacherModalTitle').textContent='Edit Teacher';document.getElementById('tName').value=t.name;document.getElementById('tId').value=t.id;document.getElementById('tDept').value=t.department;document.getElementById('tEmail').value=t.email||'';document.getElementById('tExp').value=t.experience||'';document.getElementById('tSubjects').value=t.subjects||'';document.getElementById('teacherModal').classList.add('open');}
+function saveTeacher(){let t={name:tName.value.trim(),id:tId.value.trim(),department:tDept.value,email:tEmail.value.trim(),experience:+tExp.value||0,subjects:tSubjects.value.trim()};if(!t.name||!t.id)return toast('Name and Employee ID are required');if(editingTeacher){let i=db.teachers.findIndex(x=>x.id===editingTeacher);db.teachers[i]=t}else if(db.teachers.some(x=>x.id===t.id))return toast('Employee ID already exists');else db.teachers.push(t);saveDB();closeTeacherModal();toast(editingTeacher?'Teacher updated':'Teacher added successfully');}
+function deleteTeacher(id){let t=db.teachers.find(x=>x.id===id);if(!t)return;if(confirm(`Delete ${t.name}? This also removes associated feedback.`)){db.teachers=db.teachers.filter(x=>x.id!==id);db.feedback=db.feedback.filter(x=>x.teacherId!==id);saveDB();toast('Teacher deleted');}}
+function clearTeachers(){if(confirm('Delete ALL teachers and their feedback? This cannot be undone.')){db.teachers=[];db.feedback=[];saveDB();toast('All teachers deleted');}}
+function renderCandidates(){let el=document.getElementById('candidateTable');if(!el)return;el.innerHTML='<tr><th>Candidate</th><th>Department</th><th>Match</th><th>Recommendation</th><th>Actions</th></tr>'+db.candidates.map(c=>`<tr><td><b>${escapeHtml(c.name)}</b></td><td>${escapeHtml(c.department)}</td><td><b>${c.match}%</b></td><td><span class="status ${c.match>=85?'ok':'warn'}">${c.match>=85?'SHORTLIST':'REVIEW'}</span></td><td><button class="action-btn danger" onclick="deleteCandidate('${c.id}')">🗑️ Delete</button></td></tr>`).join('')||'<tr><td colspan="5" class="muted">No candidates. Add one using Recruitment.</td></tr>';}
+function deleteCandidate(id){if(confirm('Delete this candidate?')){db.candidates=db.candidates.filter(x=>x.id!==id);saveDB();}}
+function clearCandidates(){if(confirm('Delete ALL candidates?')){db.candidates=[];saveDB();toast('Candidates cleared');}}
+const oldMatch=match;match=function(){oldMatch();const name=n.value||'Demo Candidate',score=Math.min(98,55+(+e.value||0)*5+(q.value.includes('PhD')?16:10)+(s.value?10:0)+(l.value?7:0));db.candidates.push({id:'C'+Date.now(),name,department:'Pending assignment',match:score});saveDB();}
+let ratings={teaching:0,communication:0,knowledge:0,engagement:0};
+function renderStars(){document.querySelectorAll('.star-rating').forEach(box=>{let key=box.dataset.rate;box.innerHTML=[1,2,3,4,5].map(i=>`<button class="${i<=ratings[key]?'active':''}" onclick="setRating('${key}',${i})">★</button>`).join('');});}
+function setRating(k,v){ratings[k]=v;renderStars();}
+function renderFeedbackTeachers(){let sel=document.getElementById('feedbackTeacher');if(!sel)return;sel.innerHTML=db.teachers.map(t=>`<option value="${t.id}">${escapeHtml(t.name)} — ${escapeHtml(t.department)}</option>`).join('')||'<option>No teachers available</option>';renderStars();renderFeedbackInsights();}
+function submitFeedback(){if(!db.teachers.length)return toast('Add a teacher first');if(Object.values(ratings).some(v=>!v))return toast('Please rate all four categories');db.feedback.push({teacherId:feedbackTeacher.value,...ratings,comment:feedbackComment.value.trim(),date:new Date().toISOString()});ratings={teaching:0,communication:0,knowledge:0,engagement:0};feedbackComment.value='';saveDB();toast('Feedback submitted and performance updated');}
+function renderFeedbackInsights(){let el=document.getElementById('feedbackInsights');if(!el)return;if(!db.feedback.length){el.innerHTML='No reviews submitted yet. Performance bars will update automatically after feedback.';return;}let ranked=db.teachers.map(t=>({t,p:perf(t)})).filter(x=>x.p.count).sort((a,b)=>b.p.overall-a.p.overall);el.innerHTML=ranked.slice(0,5).map(({t,p})=>`<div class="insight"><div class="dot" style="background:${p.overall>=80?'var(--green)':p.overall>=60?'var(--orange)':'var(--red)'}"></div><div><b>${escapeHtml(t.name)} — ${p.overall}% performance</b><br><small>${p.count} reviews · Teaching ${p.teaching}% · Engagement ${p.engagement}%</small></div></div>`).join('');}
+function renderPerformance(){let el=document.querySelector('#performance .two .card:first-child .tablewrap table');if(!el)return;el.innerHTML='<tr><th>Faculty</th><th>Teaching</th><th>Reviews</th><th>Performance</th></tr>'+db.teachers.map(t=>{let p=perf(t);return `<tr><td>${escapeHtml(t.name)}</td><td>${p.count?p.teaching+'%':'—'}</td><td>${p.count}</td><td><b>${p.count?p.overall:'—'}</b></td></tr>`}).join('');}
+function renderAll(){renderTeachers();renderCandidates();renderFeedbackTeachers();renderPerformance();let total=db.teachers.length;let dash=document.querySelector('#dashboard .metric-card .num');if(dash)dash.textContent=total;}
+function toggleTheme(){let light=document.body.dataset.theme==='light';document.body.dataset.theme=light?'dark':'light';localStorage.setItem('nexusTheme',document.body.dataset.theme);themeBtn.textContent=light?'☀️ Light':'🌙 Dark';toast(light?'Dark mode activated':'Light mode activated');}
+function login(){if(loginUser.value==='admin'&&loginPass.value==='admin123'&&loginRole.value==='Administrator'){loginScreen.classList.add('hidden');localStorage.setItem('nexusLoggedIn','1');toast('Welcome, Administrator')}else toast('Demo access: admin / admin123 / Administrator');}
+function exportData(){let blob=new Blob([JSON.stringify(db,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='nexus-backup.json';a.click();URL.revokeObjectURL(a.href);toast('Backup exported');}
+function clearFeedback(){if(confirm('Reset all feedback and performance review data?')){db.feedback=[];saveDB();toast('Feedback reset');}}
+function resetAll(){if(confirm('Reset the entire demo database to default data?')){db=structuredClone(defaults);saveDB();toast('Demo reset complete');}}
+document.body.dataset.theme=localStorage.getItem('nexusTheme')||'dark';themeBtn.textContent=document.body.dataset.theme==='light'?'🌙 Dark':'☀️ Light';
+if(localStorage.getItem('nexusLoggedIn')==='1')loginScreen.classList.add('hidden');
+renderAll();
+
+</script>
+</body></html>
