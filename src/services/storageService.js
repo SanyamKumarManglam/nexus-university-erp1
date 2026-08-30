@@ -23,7 +23,8 @@ const STORAGE_KEYS = {
   CALENDAR: 'nexus_db_calendar_v2',
   SESSION: 'nexus_session_user_v2',
   LANGUAGE: 'nexus_lang_pref',
-  THEME: 'nexus_theme_pref'
+  THEME: 'nexus_theme_pref',
+  CAPACITY_CAP: 'nexus_capacity_cap_v2'
 };
 
 function getOrInit(key, defaultData) {
@@ -100,6 +101,36 @@ export const storageService = {
     }
   },
 
+  getCapacityCap: () => {
+    try {
+      const raw = sessionStorage.getItem(STORAGE_KEYS.CAPACITY_CAP) || localStorage.getItem(STORAGE_KEYS.CAPACITY_CAP);
+      return raw ? parseInt(raw, 10) : null;
+    } catch {
+      return null;
+    }
+  },
+  saveCapacityCap: (cap) => {
+    try {
+      if (cap === null || cap === undefined || isNaN(cap)) {
+        sessionStorage.removeItem(STORAGE_KEYS.CAPACITY_CAP);
+        localStorage.removeItem(STORAGE_KEYS.CAPACITY_CAP);
+      } else {
+        sessionStorage.setItem(STORAGE_KEYS.CAPACITY_CAP, String(cap));
+        localStorage.setItem(STORAGE_KEYS.CAPACITY_CAP, String(cap));
+      }
+    } catch (e) {
+      console.error('Failed to save capacity cap:', e);
+    }
+  },
+  clearCapacityCap: () => {
+    try {
+      sessionStorage.removeItem(STORAGE_KEYS.CAPACITY_CAP);
+      localStorage.removeItem(STORAGE_KEYS.CAPACITY_CAP);
+    } catch (e) {
+      console.error('Failed to clear capacity cap:', e);
+    }
+  },
+
   resetAllData: () => {
     save(STORAGE_KEYS.USERS, mockUsers);
     save(STORAGE_KEYS.FACULTY, mockFaculty);
@@ -112,5 +143,7 @@ export const storageService = {
     save(STORAGE_KEYS.ANNOUNCEMENTS, mockAnnouncements);
     save(STORAGE_KEYS.LEAVE, mockLeaveRequests);
     save(STORAGE_KEYS.CALENDAR, mockCalendarEvents);
+    sessionStorage.removeItem(STORAGE_KEYS.CAPACITY_CAP);
+    localStorage.removeItem(STORAGE_KEYS.CAPACITY_CAP);
   }
 };

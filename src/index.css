@@ -1160,9 +1160,278 @@ body::after {
   .content-area { padding: 16px 16px 85px; }
   .topbar { padding: 14px 16px; }
   .cards-grid { grid-template-columns: 1fr 1fr; }
+  .view-switcher-toggle { display: none; }
 }
 
 @media (max-width: 540px) {
   .cards-grid { grid-template-columns: 1fr; }
   .hero-banner { padding: 20px; }
 }
+
+/* ============================================================
+   Desktop / Mobile Responsive View Switcher Controls
+   ============================================================ */
+.view-switcher-toggle {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(15, 25, 42, 0.7);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-full);
+  padding: 3px;
+  gap: 2px;
+}
+
+[data-theme="light"] .view-switcher-toggle {
+  background: rgba(241, 245, 249, 0.9);
+  border-color: rgba(203, 213, 225, 0.8);
+}
+
+.view-switcher-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 11px;
+  border-radius: var(--radius-full);
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 11.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s var(--ease);
+}
+
+.view-switcher-btn:hover {
+  color: var(--text-main);
+}
+
+.view-switcher-btn.active {
+  background: linear-gradient(135deg, var(--cyan), var(--blue-dark));
+  color: #ffffff;
+  box-shadow: 0 2px 10px rgba(0, 169, 224, 0.35);
+}
+
+/* ============================================================
+   Manual Capacity Cap Controls & Pills
+   ============================================================ */
+.capacity-cap-card {
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.capacity-cap-card:hover {
+  border-color: rgba(0, 210, 255, 0.4);
+}
+
+.preset-active {
+  border-color: var(--cyan) !important;
+  color: var(--cyan) !important;
+  background: rgba(0, 169, 224, 0.15) !important;
+  font-weight: 700 !important;
+}
+
+.input-error {
+  border-color: var(--red) !important;
+  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2) !important;
+}
+
+/* ============================================================
+   Interactive Mobile Device Simulator (Phone Mockup Viewport)
+   ============================================================ */
+.mobile-preview-backdrop {
+  min-height: 100vh;
+  width: 100%;
+  background: radial-gradient(circle at 50% 15%, #0f1c2e 0%, #03060c 65%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 16px 12px 30px;
+  position: relative;
+  overflow-x: hidden;
+}
+
+[data-theme="light"] .mobile-preview-backdrop {
+  background: radial-gradient(circle at 50% 15%, #e2e8f0 0%, #cbd5e1 75%);
+}
+
+.mobile-preview-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 440px;
+  margin-bottom: 12px;
+  padding: 8px 14px;
+  background: rgba(15, 25, 42, 0.85);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-full);
+  backdrop-filter: blur(16px);
+  box-shadow: var(--shadow-md);
+  z-index: 50;
+}
+
+[data-theme="light"] .mobile-preview-topbar {
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.mobile-preview-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.mobile-device-frame {
+  width: 100%;
+  max-width: 400px;
+  height: 840px;
+  max-height: 88vh;
+  background: var(--bg-dark);
+  border: 11px solid #1a2636;
+  border-radius: 46px;
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.12);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  animation: phonePop 0.35s var(--ease);
+}
+
+[data-theme="light"] .mobile-device-frame {
+  border-color: #334155;
+  box-shadow: 0 25px 70px rgba(15, 23, 42, 0.25), 0 0 0 1px rgba(0, 0, 0, 0.08);
+}
+
+@keyframes phonePop {
+  from { opacity: 0; transform: scale(0.96) translateY(12px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.device-status-bar {
+  height: 32px;
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 18px;
+  flex-shrink: 0;
+  z-index: 48;
+}
+
+.status-time {
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: -0.2px;
+  color: var(--text-main);
+}
+
+.dynamic-island-notch {
+  width: 90px;
+  height: 18px;
+  background: #000000;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.notch-camera {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #111827;
+  border: 1.5px solid #1f2937;
+}
+
+.status-icons {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  color: var(--text-main);
+}
+
+.device-screen-viewport {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: relative;
+  background: var(--bg-dark);
+}
+
+.device-screen-viewport::-webkit-scrollbar {
+  width: 4px;
+}
+.device-screen-viewport::-webkit-scrollbar-thumb {
+  background: var(--border-subtle);
+  border-radius: 4px;
+}
+
+/* Scoped layout inside Mobile Device Simulator */
+.mobile-view-forced .sidebar {
+  display: none !important;
+}
+
+.mobile-view-forced.app-container {
+  min-height: 100%;
+}
+
+.mobile-view-forced .main-wrapper {
+  margin-left: 0 !important;
+  width: 100% !important;
+  min-width: 0 !important;
+}
+
+.mobile-view-forced .mobile-bottom-nav {
+  display: flex !important;
+  position: sticky !important;
+  bottom: 0 !important;
+}
+
+.mobile-view-forced .content-area {
+  padding: 14px 14px 75px !important;
+}
+
+.mobile-view-forced .topbar {
+  padding: 10px 12px !important;
+  flex-wrap: wrap !important;
+  gap: 8px !important;
+}
+
+.mobile-view-forced .topbar-left .page-title h1 {
+  font-size: 15px !important;
+}
+.mobile-view-forced .topbar-left .page-title p {
+  font-size: 11px !important;
+}
+
+.mobile-view-forced .cards-grid {
+  grid-template-columns: 1fr 1fr !important;
+  gap: 10px !important;
+}
+
+.mobile-view-forced .grid-2,
+.mobile-view-forced .grid-3 {
+  grid-template-columns: 1fr !important;
+}
+
+.mobile-view-forced .hero-banner {
+  padding: 16px 14px !important;
+}
+.mobile-view-forced .hero-banner h2 {
+  font-size: 16.5px !important;
+}
+.mobile-view-forced .hero-banner p {
+  font-size: 12px !important;
+}
+
+.mobile-view-forced .table-container {
+  overflow-x: auto !important;
+}
+.mobile-view-forced .custom-table {
+  min-width: 480px !important;
+}
+

@@ -3,8 +3,9 @@ import { useAuth } from './context/AuthContext';
 import { useLanguage } from './context/LanguageContext';
 import { useToast } from './context/ToastContext';
 import { ToastContainer } from './components/common/ToastContainer';
-import { useContext } from 'react';
 import { ToastProvider } from './context/ToastContext';
+import { CapacityProvider } from './context/CapacityContext';
+import { Monitor, Smartphone, X } from 'lucide-react';
 
 // Common Components
 import { Topbar } from './components/common/Topbar';
@@ -61,6 +62,22 @@ export function AppContent() {
 
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isCopilotOpen, setIsCopilotOpen] = useState(false);
+
+  // Responsive View Switcher Mode: 'desktop' | 'mobile'
+  const [viewMode, setViewMode] = useState(() => {
+    try {
+      return sessionStorage.getItem('nexus_view_mode_pref') || 'desktop';
+    } catch {
+      return 'desktop';
+    }
+  });
+
+  const handleSetViewMode = (mode) => {
+    setViewMode(mode);
+    try {
+      sessionStorage.setItem('nexus_view_mode_pref', mode);
+    } catch {}
+  };
 
   // Sync activeTab when role changes on login/logout
   useEffect(() => {
@@ -222,6 +239,90 @@ export function AppContent() {
     return null;
   };
 
+  // Render Mobile Phone Simulation Frame when Mobile View is selected
+  if (viewMode === 'mobile') {
+    return (
+      <div className="mobile-preview-backdrop">
+        <CursorTrail />
+
+        {/* Top Control Bar */}
+        <div className="mobile-preview-topbar">
+          <div className="mobile-preview-title">
+            <Smartphone size={16} style={{ color: 'var(--cyan)' }} />
+            <span>Responsive Mobile View (Phone Device Simulator)</span>
+          </div>
+
+          <div className="mobile-preview-actions">
+            <button
+              type="button"
+              className="btn-primary"
+              style={{ padding: '6px 14px', fontSize: '12px', display: 'flex', alignItems: 'center', gap: 6 }}
+              onClick={() => handleSetViewMode('desktop')}
+            >
+              <Monitor size={14} /> Switch to Desktop View
+            </button>
+          </div>
+        </div>
+
+        {/* Realistic Mobile Device Mockup */}
+        <div className="mobile-device-frame">
+          {/* Status Bar */}
+          <div className="device-status-bar">
+            <span className="status-time">9:41</span>
+            <div className="dynamic-island-notch">
+              <div className="notch-camera" />
+            </div>
+            <div className="status-icons">
+              <span style={{ fontSize: '10px', fontWeight: 800 }}>5G</span>
+              <span>📶</span>
+              <span>🔋</span>
+            </div>
+          </div>
+
+          {/* Interactive Screen Viewport */}
+          <div className="device-screen-viewport">
+            <div className="app-container mobile-view-forced">
+              {/* Main Content Area */}
+              <div className="main-wrapper">
+                <Topbar
+                  activePageTitle={pageTitle}
+                  activePageSubtitle={pageSubtitle}
+                  onOpenSearch={() => setIsSearchOpen(true)}
+                  onOpenCopilot={() => setIsCopilotOpen(true)}
+                  onNavigate={handleGlobalNavigate}
+                  viewMode={viewMode}
+                  onSetViewMode={handleSetViewMode}
+                />
+
+                <main className="content-area">
+                  {renderMainContent()}
+                </main>
+              </div>
+
+              {/* Mobile Bottom Navigation Bar */}
+              <MobileNav activeTab={activeTab} onSelectTab={setActiveTab} />
+            </div>
+          </div>
+        </div>
+
+        {/* Global Search Modal */}
+        <GlobalSearchModal
+          isOpen={isSearchOpen}
+          onClose={() => setIsSearchOpen(false)}
+          onNavigate={handleGlobalNavigate}
+        />
+
+        {/* AI Copilot Drawer */}
+        <FacultyCopilotDrawer
+          isOpen={isCopilotOpen}
+          onClose={() => setIsCopilotOpen(false)}
+          onNavigate={handleGlobalNavigate}
+        />
+      </div>
+    );
+  }
+
+  // Standard Desktop Layout
   return (
     <div className="app-container">
       <CursorTrail />
@@ -237,6 +338,8 @@ export function AppContent() {
           onOpenSearch={() => setIsSearchOpen(true)}
           onOpenCopilot={() => setIsCopilotOpen(true)}
           onNavigate={handleGlobalNavigate}
+          viewMode={viewMode}
+          onSetViewMode={handleSetViewMode}
         />
 
         <main className="content-area">
@@ -244,7 +347,7 @@ export function AppContent() {
         </main>
       </div>
 
-      {/* Mobile Bottom Navigation Bar */}
+      {/* Mobile Bottom Navigation Bar for narrow screens */}
       <MobileNav activeTab={activeTab} onSelectTab={setActiveTab} />
 
       {/* Global Search Modal */}
@@ -265,5 +368,9 @@ export function AppContent() {
 }
 
 export default function App() {
-  return <AppContent />;
+  return (
+    <CapacityProvider>
+      <AppContent />
+    </CapacityProvider>
+  );
 }

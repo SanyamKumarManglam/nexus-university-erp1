@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useLanguage } from '../../context/LanguageContext';
+import { useCapacity } from '../../context/CapacityContext';
+import { useToast } from '../../context/ToastContext';
 import { storageService } from '../../services/storageService';
 import {
   Users,
@@ -16,7 +18,10 @@ import {
   Sparkles,
   ArrowRight,
   ShieldAlert,
-  CheckCircle
+  CheckCircle,
+  Sliders,
+  RotateCcw,
+  Check
 } from 'lucide-react';
 import { StatusBadge, PriorityBadge } from '../common/PriorityBadge';
 import { RadialProgress } from '../common/RadialProgress';
@@ -24,6 +29,8 @@ import { RadialProgress } from '../common/RadialProgress';
 export function AdminCommandCenter({ onNavigate }) {
   const { currentUser } = useAuth();
   const { t } = useLanguage();
+  const toast = useToast();
+  const { capacityCap, isCustom, setCapacityCap, resetCapacityCap, getEffectiveCap, validateCapInput } = useCapacity();
 
   const [facultyList, setFacultyList] = useState([]);
   const [studentList, setStudentList] = useState([]);
@@ -31,6 +38,40 @@ export function AdminCommandCenter({ onNavigate }) {
   const [onboardingList, setOnboardingList] = useState([]);
   const [leaveList, setLeaveList] = useState([]);
   const [announcements, setAnnouncements] = useState([]);
+
+  // Local state for capacity cap inline control
+  const [inlineCapInput, setInlineCapInput] = useState(capacityCap ? String(capacityCap) : '');
+  const [inlineError, setInlineError] = useState('');
+  const [isEditingCap, setIsEditingCap] = useState(false);
+
+  useEffect(() => {
+    setInlineCapInput(capacityCap ? String(capacityCap) : '');
+    setInlineError('');
+  }, [capacityCap]);
+
+  const handleSaveInlineCap = (e) => {
+    if (e) e.preventDefault();
+    const check = validateCapInput(inlineCapInput);
+    if (!check.isValid) {
+      setInlineError(check.message);
+      toast.error(check.message);
+      return;
+    }
+    setInlineError('');
+    const res = setCapacityCap(inlineCapInput);
+    if (res.success) {
+      toast.success(`Capacity Cap updated to ${res.value} advisees.`);
+      setIsEditingCap(false);
+    }
+  };
+
+  const handleResetInlineCap = () => {
+    resetCapacityCap();
+    setInlineCapInput('');
+    setInlineError('');
+    setIsEditingCap(false);
+    toast.info('Capacity Cap reset to benchmark defaults.');
+  };
 
   useEffect(() => {
     setFacultyList(storageService.getFaculty());
@@ -41,10 +82,13 @@ export function AdminCommandCenter({ onNavigate }) {
     setAnnouncements(storageService.getAnnouncements());
   }, []);
 
-  // Compute live KPIs
+  // Compute live KPIs with dynamic capacity cap
   const totalFaculty = facultyList.length;
   const totalStudents = studentList.length;
-  const overloadedAdvisors = facultyList.filter((f) => (f.studentsAssigned / f.maxCapacity) > 0.9);
+  const overloadedAdvisors = facultyList.filter((f) => {
+    const effectiveCap = getEffectiveCap(f.maxCapacity);
+    return (f.studentsAssigned / effectiveCap) > 0.9;
+  });
   const atRiskFaculty = facultyList.filter((f) => f.retentionRisk === 'High');
   const atRiskStudents = studentList.filter((s) => s.riskLevel === 'At Risk' || s.riskLevel === 'Critical');
   
@@ -225,19 +269,91 @@ export function AdminCommandCenter({ onNavigate }) {
       <div className="grid-2">
         {/* Left: Advisor Workload Live Health */}
         <div className="glass-card">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14, flexWrap: 'wrap', gap: 10 }}>
             <div>
-              <h3 style={{ margin: 0, fontSize: '15px', fontWeight: 800 }}>Faculty Advisor Caseload</h3>
-              <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>Live capacity tracking across departments</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <h3 style={{ margin: 0, fontSize: '15px', fontWeight: 800 }}>Faculty Advisor Caseload</h3>
+                <span
+                  className={`badge ${isCustom ? 'badge-primary' : 'badge-neutral'}`}
+                  style={{ fontSize: '10.5px', padding: '2px 8px' }}
+                >
+                  {isCustom ? `Cap: ${capacityCap}` : 'Default Caps'}
+                </span>
+              </div>
+              <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
+                {isCustom ? `Evaluated against manual ${capacityCap} limit` : 'Live capacity tracking across departments'}
+              </span>
             </div>
-            <button className="btn-secondary" onClick={() => onNavigate('workload')}>
-              View Optimizer →
-            </button>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+              <button
+                className="btn-secondary"
+                style={{ padding: '5px 10px', fontSize: '11.5px', display: 'flex', alignItems: 'center', gap: 4 }}
+                onClick={() => setIsEditingCap(!isEditingCap)}
+                title="Configure Capacity Cap"
+              >
+                <Sliders size={13} /> {isEditingCap ? 'Close' : 'Set Cap'}
+              </button>
+              <button className="btn-secondary" onClick={() => onNavigate('workload')}>
+                View Optimizer →
+              </button>
+            </div>
           </div>
+
+          {/* Quick Inline Capacity Cap Adjuster */}
+          {isEditingCap && (
+            <div
+              style={{
+                background: 'rgba(0, 169, 224, 0.07)',
+                border: '1px solid rgba(0, 210, 255, 0.25)',
+                borderRadius: 'var(--radius-md)',
+                padding: '10px 14px',
+                marginBottom: 16,
+                animation: 'fadeIn 0.2s ease'
+              }}
+            >
+              <form onSubmit={handleSaveInlineCap} style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+                <label style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-main)' }}>
+                  Set Cap:
+                </label>
+                <input
+                  type="number"
+                  min="10"
+                  max="500"
+                  value={inlineCapInput}
+                  onChange={(e) => {
+                    setInlineCapInput(e.target.value);
+                    if (inlineError) setInlineError('');
+                  }}
+                  placeholder="e.g. 120"
+                  className="form-input"
+                  style={{ width: '90px', padding: '5px 8px', fontSize: '12px' }}
+                />
+                <button type="submit" className="btn-primary" style={{ padding: '5px 12px', fontSize: '12px' }}>
+                  Apply
+                </button>
+                {isCustom && (
+                  <button
+                    type="button"
+                    onClick={handleResetInlineCap}
+                    className="btn-secondary"
+                    style={{ padding: '5px 10px', fontSize: '12px' }}
+                  >
+                    Reset
+                  </button>
+                )}
+              </form>
+              {inlineError && (
+                <div style={{ color: 'var(--red)', fontSize: '11px', marginTop: 4 }}>
+                  {inlineError}
+                </div>
+              )}
+            </div>
+          )}
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
             {facultyList.slice(0, 5).map((f) => {
-              const loadPercent = Math.round((f.studentsAssigned / f.maxCapacity) * 100);
+              const effectiveCap = getEffectiveCap(f.maxCapacity);
+              const loadPercent = Math.round((f.studentsAssigned / effectiveCap) * 100);
               let barColor = 'green';
               if (loadPercent > 90) barColor = 'red';
               else if (loadPercent >= 75) barColor = 'orange';
@@ -247,7 +363,7 @@ export function AdminCommandCenter({ onNavigate }) {
                   <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12.5px', marginBottom: 5 }}>
                     <span style={{ fontWeight: 700 }}>{f.name} ({f.department})</span>
                     <span style={{ color: 'var(--text-muted)' }}>
-                      <b>{f.studentsAssigned}</b> / {f.maxCapacity} advisees ({loadPercent}%)
+                      <b>{f.studentsAssigned}</b> / <span style={{ color: isCustom ? 'var(--cyan)' : 'inherit', fontWeight: 600 }}>{effectiveCap}</span> advisees ({loadPercent}%)
                     </span>
                   </div>
                   <div className="progress-track">

@@ -15,12 +15,22 @@ import {
   LogOut,
   ChevronDown,
   HelpCircle,
-  ShieldCheck
+  ShieldCheck,
+  Monitor,
+  Smartphone
 } from 'lucide-react';
 import { NotificationDrawer } from './NotificationDrawer';
 import { getInitials } from '../../utils/formatters';
 
-export function Topbar({ activePageTitle, activePageSubtitle, onOpenSearch, onOpenCopilot, onNavigate }) {
+export function Topbar({
+  activePageTitle,
+  activePageSubtitle,
+  onOpenSearch,
+  onOpenCopilot,
+  onNavigate,
+  viewMode = 'desktop',
+  onSetViewMode
+}) {
   const { currentUser, role, logout } = useAuth();
   const { currentLang, changeLanguage, languageNames, availableLanguages, t } = useLanguage();
   const { unreadCount } = useNotifications();
@@ -84,6 +94,36 @@ export function Topbar({ activePageTitle, activePageSubtitle, onOpenSearch, onOp
           <span>{t('btn_search')}</span>
           <kbd className="search-kbd">Ctrl K</kbd>
         </button>
+
+        {/* Desktop / Mobile Responsive View Switcher */}
+        {onSetViewMode && (
+          <div className="view-switcher-toggle" title="Switch layout preview mode">
+            <button
+              type="button"
+              className={`view-switcher-btn ${viewMode === 'desktop' ? 'active' : ''}`}
+              onClick={() => {
+                onSetViewMode('desktop');
+                toast.info('Switched to Desktop View');
+              }}
+              title="Desktop View (Full Screen)"
+            >
+              <Monitor size={14} />
+              <span>Desktop</span>
+            </button>
+            <button
+              type="button"
+              className={`view-switcher-btn ${viewMode === 'mobile' ? 'active' : ''}`}
+              onClick={() => {
+                onSetViewMode('mobile');
+                toast.info('Switched to Mobile View (Realistic Phone Preview)');
+              }}
+              title="Mobile View (Interactive Phone Preview)"
+            >
+              <Smartphone size={14} />
+              <span>Mobile</span>
+            </button>
+          </div>
+        )}
 
         {/* AI Copilot Launcher */}
         <button
