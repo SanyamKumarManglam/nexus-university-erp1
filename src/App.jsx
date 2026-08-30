@@ -112,38 +112,39 @@ export function AppContent() {
   }
 
   // Determine Title & Subtitle for Topbar
+  // Determine Title & Subtitle for Topbar
   const getPageMeta = () => {
     const titles = {
-      'command-center': { title: t('nav_command_center'), subtitle: 'Institutional Command & Executive Operations' },
-      'recruit': { title: t('nav_recruitment'), subtitle: 'Faculty Talent Acquisition & AI Matching' },
-      'onboard': { title: t('nav_onboarding'), subtitle: '10-Step Institutional Induction Workflow' },
-      'faculty': { title: t('nav_faculty'), subtitle: 'Faculty Directory & 8-Tab Academic Dossiers' },
-      'workload': { title: t('nav_workload'), subtitle: 'Capacity-Aware Advisor Workload Optimizer' },
-      'students': { title: t('nav_students'), subtitle: 'Student Directory & Composite Index Tracking' },
-      'attendance': { title: t('nav_attendance'), subtitle: 'Real-Time Classroom Attendance Verification' },
-      'performance': { title: t('nav_performance'), subtitle: 'Faculty Outcomes & Teaching Excellence' },
-      'predictions': { title: t('nav_predictions'), subtitle: 'Predictive Intelligence & Retention Risk' },
-      'announcements': { title: t('nav_announcements'), subtitle: 'Central Multi-Tier Announcement Board' },
-      'leave': { title: t('nav_leave_mgmt'), subtitle: 'Two-Tiered Institutional Leave Governance' },
-      'calendar': { title: t('nav_calendar'), subtitle: 'University Academic & Event Schedule' },
-      'reports': { title: t('nav_reports'), subtitle: 'Audit-Grade Analytics & CSV Exports' },
-      'settings': { title: t('nav_settings'), subtitle: 'System Configurations & Database Backup' },
+      'command-center': { title: t('nav_command_center', 'Command Center'), subtitle: t('meta_sub_command_center', 'Institutional Command & Executive Operations') },
+      'recruit': { title: t('nav_recruitment', 'Recruitment'), subtitle: t('meta_sub_recruit', 'Faculty Talent Acquisition & AI Matching') },
+      'onboard': { title: t('nav_onboarding', 'Faculty Onboarding'), subtitle: t('meta_sub_onboard', '10-Step Institutional Induction Workflow') },
+      'faculty': { title: t('nav_faculty', 'Faculty Directory'), subtitle: t('meta_sub_faculty', 'Faculty Directory & Academic Dossiers') },
+      'workload': { title: t('nav_workload', 'Smart Allocation'), subtitle: t('meta_sub_workload', 'Capacity-Aware Advisor Workload Optimizer') },
+      'students': { title: t('nav_students', 'Student Directory'), subtitle: t('meta_sub_students', 'Student Directory & Composite Index Tracking') },
+      'attendance': { title: t('nav_attendance', 'Attendance Hub'), subtitle: t('meta_sub_attendance', 'Real-Time Classroom Attendance Verification') },
+      'performance': { title: t('nav_performance', 'Performance & Outcomes'), subtitle: t('meta_sub_performance', 'Faculty Outcomes & Teaching Excellence') },
+      'predictions': { title: t('nav_predictions', 'Predictive Intelligence'), subtitle: t('meta_sub_predictions', 'Predictive Intelligence & Retention Risk') },
+      'announcements': { title: t('nav_announcements', 'Announcements'), subtitle: t('meta_sub_announcements', 'Central Multi-Tier Announcement Board') },
+      'leave': { title: t('nav_leave_mgmt', 'Leave Management'), subtitle: t('meta_sub_leave', 'Two-Tiered Institutional Leave Governance') },
+      'calendar': { title: t('nav_calendar', 'University Calendar'), subtitle: t('meta_sub_calendar', 'University Academic & Event Schedule') },
+      'reports': { title: t('nav_reports', 'Reports & Analytics'), subtitle: t('meta_sub_reports', 'Audit-Grade Analytics & CSV Exports') },
+      'settings': { title: t('nav_settings', 'System Settings'), subtitle: t('meta_sub_settings', 'System Configurations & Database Backup') },
 
-      'teacher-dashboard': { title: t('nav_teacher_dashboard'), subtitle: 'Faculty Workdesk & Assigned Mentee Overview' },
-      'teacher-students': { title: 'My Mentee Roster', subtitle: 'Assigned Student Directory & Risk Alerts' },
-      'teacher-reviews': { title: 'Student Formative Reviews', subtitle: 'Submit Qualitative & Quantitative Evaluations' },
-      'teacher-leave': { title: 'My Leave Applications', subtitle: 'Duty & Absence Requests to Dean' },
-      'teacher-profile': { title: 'Faculty Profile', subtitle: 'Academic Credentials & Preferences' },
+      'teacher-dashboard': { title: t('nav_teacher_dashboard', 'Teacher Workdesk'), subtitle: t('meta_sub_teacher_dashboard', 'Faculty Workdesk & Assigned Mentee Overview') },
+      'teacher-students': { title: t('nav_teacher_students', 'My Mentee Roster'), subtitle: t('meta_sub_teacher_students', 'Assigned Student Directory & Risk Alerts') },
+      'teacher-reviews': { title: t('nav_teacher_reviews', 'Student Reviews'), subtitle: t('meta_sub_teacher_reviews', 'Submit Qualitative & Quantitative Evaluations') },
+      'teacher-leave': { title: t('nav_teacher_leave', 'My Leave Applications'), subtitle: t('meta_sub_teacher_leave', 'Duty & Absence Requests to Dean') },
+      'teacher-profile': { title: t('nav_teacher_profile', 'Faculty Profile'), subtitle: t('meta_sub_teacher_profile', 'Academic Credentials & Preferences') },
 
-      'student-dashboard': { title: t('nav_student_dashboard'), subtitle: 'Student Hub & Academic Progress' },
-      'student-profile': { title: 'Student Profile', subtitle: 'Enrollment & Degree Program Information' },
-      'student-attendance': { title: 'Lecture Attendance', subtitle: 'Personal Biometric & Class Attendance Record' },
-      'student-performance': { title: 'My Student Index', subtitle: 'Composite Academic Health & Mentorship Metric' },
-      'student-reviews': { title: 'Faculty Course Evaluations', subtitle: 'Constructive Instruction Feedback Portal' },
-      'student-leave': { title: 'Absence Applications', subtitle: 'Submit Leave Requests to Assigned Advisor' }
+      'student-dashboard': { title: t('nav_student_dashboard', 'Student Portal'), subtitle: t('meta_sub_student_dashboard', 'Student Hub & Academic Progress') },
+      'student-profile': { title: t('nav_student_profile', 'Student Profile'), subtitle: t('meta_sub_student_profile', 'Enrollment & Degree Program Information') },
+      'student-attendance': { title: t('nav_student_attendance', 'Lecture Attendance'), subtitle: t('meta_sub_student_attendance', 'Personal Biometric & Class Attendance Record') },
+      'student-performance': { title: t('nav_student_index', 'My Student Index'), subtitle: t('meta_sub_student_performance', 'Composite Academic Health & Mentorship Metric') },
+      'student-reviews': { title: t('nav_student_reviews', 'Faculty Course Evaluations'), subtitle: t('meta_sub_student_reviews', 'Constructive Instruction Feedback Portal') },
+      'student-leave': { title: t('nav_student_leave', 'Absence Applications'), subtitle: t('meta_sub_student_leave', 'Submit Leave Requests to Assigned Advisor') }
     };
 
-    return titles[activeTab] || { title: 'NEXUS University', subtitle: 'Academic Operating Platform' };
+    return titles[activeTab] || { title: t('app_name', 'NEXUS University'), subtitle: t('academic_operating_platform', 'Academic Operating Platform') };
   };
 
   const { title: pageTitle, subtitle: pageSubtitle } = getPageMeta();

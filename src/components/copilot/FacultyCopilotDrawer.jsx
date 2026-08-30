@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { copilotService } from '../../services/copilotService';
+import { useLanguage } from '../../context/LanguageContext';
 import {
   Sparkles,
   X,
@@ -14,6 +15,7 @@ import {
 } from 'lucide-react';
 
 export function FacultyCopilotDrawer({ isOpen, onClose, onNavigate }) {
+  const { t } = useLanguage();
   const [messages, setMessages] = useState([
     {
       sender: 'copilot',
@@ -131,10 +133,10 @@ export function FacultyCopilotDrawer({ isOpen, onClose, onNavigate }) {
             </div>
             <div>
               <h3 style={{ margin: 0, fontSize: '15px', fontWeight: 800, color: 'var(--text-main)' }}>
-                NEXUS Intelligence
+                {t('ai_copilot', 'NEXUS Intelligence Copilot')}
               </h3>
               <span style={{ fontSize: '11px', color: 'var(--cyan)' }}>
-                Deterministic Institutional Copilot
+                {t('copilot_subtitle', 'Deterministic Institutional AI Advisor')}
               </span>
             </div>
           </div>
@@ -189,7 +191,7 @@ export function FacultyCopilotDrawer({ isOpen, onClose, onNavigate }) {
 
                 {m.recommendation && (
                   <div style={{ marginTop: 8, padding: '8px 10px', background: 'rgba(0, 169, 224, 0.08)', borderRadius: '6px', fontSize: '11.5px', color: 'var(--text-muted)' }}>
-                    <b>Recommendation:</b> {m.recommendation}
+                    <b>{t('lbl_recommendation', 'Recommendation')}:</b> {m.recommendation}
                   </div>
                 )}
 
@@ -208,7 +210,7 @@ export function FacultyCopilotDrawer({ isOpen, onClose, onNavigate }) {
 
           {isTyping && (
             <div style={{ alignSelf: 'flex-start', background: 'rgba(15, 25, 45, 0.85)', padding: '10px 14px', borderRadius: '16px', fontSize: '12px', color: 'var(--cyan)' }}>
-              Analyzing live academic records...
+              {t('lbl_copilot_analyzing', 'Analyzing live academic records...')}
             </div>
           )}
 
@@ -218,7 +220,7 @@ export function FacultyCopilotDrawer({ isOpen, onClose, onNavigate }) {
         {/* Suggested Queries */}
         <div style={{ padding: '10px 18px', borderTop: '1px solid var(--border-subtle)', background: 'rgba(0,0,0,0.15)' }}>
           <div style={{ fontSize: '11px', color: 'var(--text-dim)', fontWeight: 700, textTransform: 'uppercase', marginBottom: 6 }}>
-            Quick Inquiries:
+            {t('lbl_quick_inquiries', 'Quick Inquiries:')}
           </div>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
             {suggested.map((q, i) => (
@@ -255,7 +257,7 @@ export function FacultyCopilotDrawer({ isOpen, onClose, onNavigate }) {
             type="text"
             value={inputQuery}
             onChange={(e) => setInputQuery(e.target.value)}
-            placeholder="Ask NEXUS Copilot anything..."
+            placeholder={t('copilot_input_placeholder', 'Ask NEXUS Copilot anything...')}
             className="form-input"
             style={{ fontSize: '13px' }}
           />

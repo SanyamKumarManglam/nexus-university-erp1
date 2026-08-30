@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../context/ToastContext';
+import { useLanguage } from '../../context/LanguageContext';
 import { BrandLogo } from '../common/BrandLogo';
-import { Shield, Lock, Mail, User, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { Shield, Lock, Mail, User, ArrowRight, CheckCircle2, Globe } from 'lucide-react';
 
 export function LoginPage({ onSwitchToRegister }) {
   const { login, loading } = useAuth();
   const toast = useToast();
+  const { t, currentLang, changeLanguage, availableLanguages, languageNames } = useLanguage();
 
   const [email, setEmail] = useState('admin@nexus.edu');
   const [password, setPassword] = useState('admin');
@@ -19,10 +21,10 @@ export function LoginPage({ onSwitchToRegister }) {
 
     try {
       await login(email, password, role);
-      toast.success(`Welcome to NEXUS, ${role.toUpperCase()}!`);
+      toast.success(`${t('welcome_to_nexus', 'Welcome to NEXUS')}, ${role.toUpperCase()}!`);
     } catch (err) {
-      setError(err.message || 'Login failed. Please check your credentials.');
-      toast.error(err.message || 'Login failed');
+      setError(err.message || t('login_failed', 'Login failed. Please check your credentials.'));
+      toast.error(err.message || t('login_failed', 'Login failed'));
     }
   };
 
@@ -43,16 +45,34 @@ export function LoginPage({ onSwitchToRegister }) {
 
   return (
     <div className="login-screen">
+      {/* Top language selector in login */}
+      <div style={{ position: 'absolute', top: 20, right: 20, zIndex: 100 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'rgba(255,255,255,0.06)', padding: '6px 12px', borderRadius: 'var(--radius-full)', border: '1px solid var(--border-subtle)' }}>
+          <Globe size={14} style={{ color: 'var(--cyan)' }} />
+          <select
+            value={currentLang}
+            onChange={(e) => changeLanguage(e.target.value)}
+            style={{ background: 'transparent', border: 'none', color: 'var(--text-main)', fontSize: '12px', fontWeight: 700, outline: 'none', cursor: 'pointer' }}
+          >
+            {availableLanguages.map((code) => (
+              <option key={code} value={code} style={{ background: '#0b1329', color: '#fff' }}>
+                {languageNames[code]}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+
       <div className="login-box" style={{ maxWidth: '440px' }}>
         <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 16 }}>
           <BrandLogo size="lg" showText={false} />
         </div>
 
         <h2 style={{ fontSize: '24px', fontWeight: 800, margin: '0 0 4px', letterSpacing: '-0.5px' }}>
-          NEXUS UNIVERSITY
+          {t('app_name', 'NEXUS UNIVERSITY')}
         </h2>
         <p style={{ color: 'var(--text-muted)', fontSize: '13px', marginBottom: 20 }}>
-          Faculty Intelligence & Operating Platform
+          {t('app_tagline', 'Faculty Intelligence & Operating Platform')}
         </p>
 
         {/* Quick Demo Role Selector */}
@@ -72,7 +92,7 @@ export function LoginPage({ onSwitchToRegister }) {
               transition: 'all 0.2s ease'
             }}
           >
-            Admin
+            {t('role_admin', 'Admin')}
           </button>
           <button
             type="button"
@@ -89,7 +109,7 @@ export function LoginPage({ onSwitchToRegister }) {
               transition: 'all 0.2s ease'
             }}
           >
-            Teacher
+            {t('role_teacher', 'Teacher')}
           </button>
           <button
             type="button"
@@ -106,7 +126,7 @@ export function LoginPage({ onSwitchToRegister }) {
               transition: 'all 0.2s ease'
             }}
           >
-            Student
+            {t('role_student', 'Student')}
           </button>
         </div>
 
@@ -129,7 +149,7 @@ export function LoginPage({ onSwitchToRegister }) {
 
         <form onSubmit={handleSubmit}>
           <div className="form-group" style={{ textAlign: 'left', marginBottom: 12 }}>
-            <label className="form-label">University Email ID</label>
+            <label className="form-label">{t('lbl_university_email', 'University Email ID')}</label>
             <div style={{ position: 'relative' }}>
               <Mail size={16} style={{ position: 'absolute', left: 12, top: 12, color: 'var(--text-dim)' }} />
               <input
@@ -145,7 +165,7 @@ export function LoginPage({ onSwitchToRegister }) {
           </div>
 
           <div className="form-group" style={{ textAlign: 'left', marginBottom: 16 }}>
-            <label className="form-label">Password</label>
+            <label className="form-label">{t('lbl_password', 'Password')}</label>
             <div style={{ position: 'relative' }}>
               <Lock size={16} style={{ position: 'absolute', left: 12, top: 12, color: 'var(--text-dim)' }} />
               <input
@@ -166,23 +186,23 @@ export function LoginPage({ onSwitchToRegister }) {
             className="btn-primary"
             style={{ width: '100%', justifyContent: 'center', padding: '12px', marginTop: 8 }}
           >
-            {loading ? 'Authenticating Session...' : 'Sign In to Command Center →'}
+            {loading ? t('lbl_authenticating', 'Authenticating Session...') : `${t('btn_login', 'Sign In')} →`}
           </button>
         </form>
 
         <div style={{ marginTop: 20, paddingTop: 16, borderTop: '1px solid var(--border-subtle)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '12px' }}>
-          <span style={{ color: 'var(--text-muted)' }}>New to NEXUS University?</span>
+          <span style={{ color: 'var(--text-muted)' }}>{t('lbl_new_to_nexus', 'New to NEXUS University?')}</span>
           <button
             type="button"
             onClick={onSwitchToRegister}
             style={{ background: 'none', border: 'none', color: 'var(--cyan)', fontWeight: 700, cursor: 'pointer' }}
           >
-            Register Account
+            {t('btn_register', 'Register Account')}
           </button>
         </div>
 
         <div style={{ marginTop: 14, fontSize: '11px', color: 'var(--text-dim)' }}>
-          Demo quick-fill active · Passwords securely masked
+          {t('lbl_demo_quick_fill', 'Demo quick-fill active · Passwords securely masked')}
         </div>
       </div>
     </div>

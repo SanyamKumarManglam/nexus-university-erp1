@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Search, X, User, GraduationCap, Briefcase, Megaphone, ArrowRight } from 'lucide-react';
 import { storageService } from '../../services/storageService';
+import { useLanguage } from '../../context/LanguageContext';
 
 export function GlobalSearchModal({ isOpen, onClose, onNavigate }) {
+  const { t } = useLanguage();
   const [query, setQuery] = useState('');
 
   useEffect(() => {
@@ -82,7 +84,7 @@ export function GlobalSearchModal({ isOpen, onClose, onNavigate }) {
             autoFocus
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search students, faculty, candidates, announcements..."
+            placeholder={t('search_placeholder', 'Search students, faculty, candidates, announcements...')}
             style={{
               flex: 1,
               background: 'transparent',
@@ -101,20 +103,20 @@ export function GlobalSearchModal({ isOpen, onClose, onNavigate }) {
         <div style={{ maxHeight: '420px', overflowY: 'auto', padding: '16px 20px' }}>
           {!query.trim() && (
             <div style={{ textAlign: 'center', padding: '30px 0', color: 'var(--text-muted)', fontSize: '13px' }}>
-              Type at least 2 characters to search across all university databases.
+              {t('search_prompt', 'Type at least 2 characters to search across all university databases.')}
             </div>
           )}
 
           {results && totalResults === 0 && (
             <div style={{ textAlign: 'center', padding: '30px 0', color: 'var(--text-dim)', fontSize: '13px' }}>
-              No matching records found for "{query}".
+              {t('search_no_records', 'No matching records found for')} "{query}".
             </div>
           )}
 
           {results && results.students.length > 0 && (
             <div style={{ marginBottom: 16 }}>
               <div style={{ fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', color: 'var(--cyan)', letterSpacing: '0.8px', marginBottom: 8 }}>
-                Students ({results.students.length})
+                {t('nav_students', 'Students')} ({results.students.length})
               </div>
               {results.students.slice(0, 4).map((s) => (
                 <div
@@ -127,7 +129,7 @@ export function GlobalSearchModal({ isOpen, onClose, onNavigate }) {
                   <div style={{ flex: 1 }}>
                     <b style={{ fontSize: '13px' }}>{s.name}</b> · <span style={{ fontSize: '11px', color: 'var(--text-dim)' }}>{s.rollNumber}</span>
                     <p style={{ margin: 0, fontSize: '11.5px', color: 'var(--text-muted)' }}>
-                      {s.program} ({s.department}) · Student Index: <b>{s.studentIndex}/100</b>
+                      {s.program} ({s.department}) · {t('composite_student_index', 'Student Index')}: <b>{s.studentIndex}/100</b>
                     </p>
                   </div>
                   <ArrowRight size={15} style={{ color: 'var(--text-dim)' }} />
@@ -139,7 +141,7 @@ export function GlobalSearchModal({ isOpen, onClose, onNavigate }) {
           {results && results.faculty.length > 0 && (
             <div style={{ marginBottom: 16 }}>
               <div style={{ fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', color: 'var(--purple-light)', letterSpacing: '0.8px', marginBottom: 8 }}>
-                Faculty & Teachers ({results.faculty.length})
+                {t('nav_faculty', 'Faculty & Teachers')} ({results.faculty.length})
               </div>
               {results.faculty.slice(0, 4).map((f) => (
                 <div
@@ -152,7 +154,7 @@ export function GlobalSearchModal({ isOpen, onClose, onNavigate }) {
                   <div style={{ flex: 1 }}>
                     <b style={{ fontSize: '13px' }}>{f.name}</b> · <span style={{ fontSize: '11px', color: 'var(--text-dim)' }}>{f.role}</span>
                     <p style={{ margin: 0, fontSize: '11.5px', color: 'var(--text-muted)' }}>
-                      Department of {f.department} · {f.studentsAssigned} advisees ({f.workloadPercent}% load)
+                      {t('th_department', 'Department')}: {f.department} · {f.studentsAssigned} {t('lbl_advisees', 'advisees')} ({f.workloadPercent}% {t('th_workload_percent', 'load')})
                     </p>
                   </div>
                   <ArrowRight size={15} style={{ color: 'var(--text-dim)' }} />
@@ -164,7 +166,7 @@ export function GlobalSearchModal({ isOpen, onClose, onNavigate }) {
           {results && results.candidates.length > 0 && (
             <div style={{ marginBottom: 16 }}>
               <div style={{ fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', color: 'var(--green)', letterSpacing: '0.8px', marginBottom: 8 }}>
-                Recruitment Candidates ({results.candidates.length})
+                {t('nav_recruitment', 'Recruitment Candidates')} ({results.candidates.length})
               </div>
               {results.candidates.slice(0, 4).map((c) => (
                 <div
@@ -177,7 +179,7 @@ export function GlobalSearchModal({ isOpen, onClose, onNavigate }) {
                   <div style={{ flex: 1 }}>
                     <b style={{ fontSize: '13px' }}>{c.name}</b> · <span style={{ fontSize: '11px', color: 'var(--text-dim)' }}>{c.position}</span>
                     <p style={{ margin: 0, fontSize: '11.5px', color: 'var(--text-muted)' }}>
-                      Status: <b>{c.status}</b> · AI Suitability Match: <b>{c.matchScore}%</b>
+                      {t('th_status', 'Status')}: <b>{t('status_' + c.status.toLowerCase(), c.status)}</b> · AI Match: <b>{c.matchScore}%</b>
                     </p>
                   </div>
                   <ArrowRight size={15} style={{ color: 'var(--text-dim)' }} />
@@ -189,7 +191,7 @@ export function GlobalSearchModal({ isOpen, onClose, onNavigate }) {
           {results && results.announcements.length > 0 && (
             <div style={{ marginBottom: 16 }}>
               <div style={{ fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', color: 'var(--orange)', letterSpacing: '0.8px', marginBottom: 8 }}>
-                Announcements ({results.announcements.length})
+                {t('nav_announcements', 'Announcements')} ({results.announcements.length})
               </div>
               {results.announcements.slice(0, 3).map((a) => (
                 <div
@@ -202,7 +204,7 @@ export function GlobalSearchModal({ isOpen, onClose, onNavigate }) {
                   <div style={{ flex: 1 }}>
                     <b style={{ fontSize: '13px' }}>{a.title}</b>
                     <p style={{ margin: 0, fontSize: '11.5px', color: 'var(--text-muted)' }}>
-                      Audience: {a.audience} · Priority: {a.priority}
+                      {a.audience} · {t('priority_' + (a.priority || 'normal').toLowerCase(), a.priority)}
                     </p>
                   </div>
                   <ArrowRight size={15} style={{ color: 'var(--text-dim)' }} />

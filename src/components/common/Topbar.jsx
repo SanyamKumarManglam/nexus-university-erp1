@@ -103,24 +103,24 @@ export function Topbar({
               className={`view-switcher-btn ${viewMode === 'desktop' ? 'active' : ''}`}
               onClick={() => {
                 onSetViewMode('desktop');
-                toast.info('Switched to Desktop View');
+                toast.info(t('msg_switched_desktop', 'Switched to Desktop View'));
               }}
               title="Desktop View (Full Screen)"
             >
               <Monitor size={14} />
-              <span>Desktop</span>
+              <span>{t('desktop_view', 'Desktop')}</span>
             </button>
             <button
               type="button"
               className={`view-switcher-btn ${viewMode === 'mobile' ? 'active' : ''}`}
               onClick={() => {
                 onSetViewMode('mobile');
-                toast.info('Switched to Mobile View (Realistic Phone Preview)');
+                toast.info(t('msg_switched_mobile', 'Switched to Mobile View (Realistic Phone Preview)'));
               }}
               title="Mobile View (Interactive Phone Preview)"
             >
               <Smartphone size={14} />
-              <span>Mobile</span>
+              <span>{t('mobile_view', 'Mobile')}</span>
             </button>
           </div>
         )}
@@ -133,7 +133,7 @@ export function Topbar({
           title="Open NEXUS Intelligence Copilot"
         >
           <Sparkles size={15} style={{ color: 'var(--cyan)' }} />
-          <span>Copilot</span>
+          <span>{t('ai_copilot_short', 'Copilot')}</span>
         </button>
 
         {/* Language Selector Dropdown */}
@@ -155,7 +155,7 @@ export function Topbar({
             <div className="dropdown-menu" style={{ width: '180px' }}>
               <div className="dropdown-header">
                 <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-dim)' }}>
-                  SELECT LANGUAGE
+                  {t('select_language', 'SELECT LANGUAGE')}
                 </span>
               </div>
               {availableLanguages.map((langKey) => (
@@ -164,7 +164,7 @@ export function Topbar({
                   onClick={() => {
                     changeLanguage(langKey);
                     setIsLangMenuOpen(false);
-                    toast.info(`Language switched to ${languageNames[langKey]}`);
+                    toast.info(`${t('msg_lang_switched', 'Language switched to')} ${languageNames[langKey]}`);
                   }}
                   className={`dropdown-item ${currentLang === langKey ? 'text-cyan-400 font-bold' : ''}`}
                   style={{
@@ -189,7 +189,7 @@ export function Topbar({
           <button
             className="icon-btn"
             onClick={() => setIsNotifOpen(!isNotifOpen)}
-            title="Notifications"
+            title={t('notifications', 'Notifications')}
           >
             <Bell size={17} />
             {unreadCount > 0 && <span className="icon-badge-count">{unreadCount}</span>}
@@ -214,7 +214,7 @@ export function Topbar({
             <div className="user-info">
               <div className="user-name">{currentUser?.name || 'User'}</div>
               <div className="user-role-badge">
-                {currentUser?.role === 'admin' ? 'Administrator' : currentUser?.role === 'teacher' ? 'Faculty / Teacher' : 'Student'}
+                {currentUser?.role === 'admin' ? t('role_admin', 'Administrator') : currentUser?.role === 'teacher' ? t('role_teacher', 'Faculty / Teacher') : t('role_student', 'Student')}
               </div>
             </div>
             <ChevronDown size={14} style={{ color: 'var(--text-dim)' }} />
@@ -239,7 +239,7 @@ export function Topbar({
                 }}
               >
                 <User size={15} />
-                <span>My Profile</span>
+                <span>{t('my_profile', 'My Profile')}</span>
               </button>
 
               <button
@@ -250,7 +250,7 @@ export function Topbar({
                 }}
               >
                 <Settings size={15} />
-                <span>{currentUser?.role === 'admin' ? 'System Settings' : 'Preferences'}</span>
+                <span>{currentUser?.role === 'admin' ? t('nav_settings', 'System Settings') : t('nav_preferences', 'Preferences')}</span>
               </button>
 
               <button
@@ -261,7 +261,7 @@ export function Topbar({
                 }}
               >
                 <Bell size={15} />
-                <span>Notifications ({unreadCount})</span>
+                <span>{t('notifications', 'Notifications')} ({unreadCount})</span>
               </button>
 
               <button
@@ -272,7 +272,7 @@ export function Topbar({
                 }}
               >
                 <Globe size={15} />
-                <span>Language ({languageNames[currentLang]})</span>
+                <span>{t('nav_language', 'Language')} ({languageNames[currentLang]})</span>
               </button>
 
               <div style={{ borderTop: '1px solid var(--border-subtle)', margin: '6px 0' }} />

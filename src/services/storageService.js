@@ -1,13 +1,13 @@
-import { mockUsers } from '../data/mockUsers';
-import { mockFaculty } from '../data/mockFaculty';
-import { mockStudents } from '../data/mockStudents';
-import { mockCandidates } from '../data/mockCandidates';
-import { mockOnboarding } from '../data/mockOnboarding';
-import { mockAttendanceRecords, departmentAttendanceStats } from '../data/mockAttendance';
-import { mockTeacherStudentReviews, mockStudentTeacherReviews } from '../data/mockReviews';
-import { mockAnnouncements } from '../data/mockAnnouncements';
-import { mockLeaveRequests } from '../data/mockLeaveRequests';
-import { mockCalendarEvents } from '../data/mockCalendar';
+import { mockUsers } from '../data/mockUsers.js';
+import { mockFaculty } from '../data/mockFaculty.js';
+import { mockStudents } from '../data/mockStudents.js';
+import { mockCandidates } from '../data/mockCandidates.js';
+import { mockOnboarding } from '../data/mockOnboarding.js';
+import { mockAttendanceRecords, departmentAttendanceStats } from '../data/mockAttendance.js';
+import { mockTeacherStudentReviews, mockStudentTeacherReviews } from '../data/mockReviews.js';
+import { mockAnnouncements } from '../data/mockAnnouncements.js';
+import { mockLeaveRequests } from '../data/mockLeaveRequests.js';
+import { mockCalendarEvents } from '../data/mockCalendar.js';
 
 const STORAGE_KEYS = {
   USERS: 'nexus_db_users_v2',
@@ -24,7 +24,8 @@ const STORAGE_KEYS = {
   SESSION: 'nexus_session_user_v2',
   LANGUAGE: 'nexus_lang_pref',
   THEME: 'nexus_theme_pref',
-  CAPACITY_CAP: 'nexus_capacity_cap_v2'
+  CAPACITY_CAP: 'nexus_capacity_cap_v2',
+  FACULTY_CAPS: 'nexus_faculty_caps_v2'
 };
 
 function getOrInit(key, defaultData) {
@@ -131,6 +132,48 @@ export const storageService = {
     }
   },
 
+  getFacultyCaps: () => {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEYS.FACULTY_CAPS);
+      return raw ? JSON.parse(raw) : {};
+    } catch {
+      return {};
+    }
+  },
+  saveFacultyCap: (facultyId, cap) => {
+    try {
+      const caps = storageService.getFacultyCaps();
+      if (cap === null || cap === undefined || isNaN(cap)) {
+        delete caps[facultyId];
+      } else {
+        caps[facultyId] = parseInt(cap, 10);
+      }
+      localStorage.setItem(STORAGE_KEYS.FACULTY_CAPS, JSON.stringify(caps));
+      return caps;
+    } catch (e) {
+      console.error('Failed to save faculty capacity cap:', e);
+      return {};
+    }
+  },
+  removeFacultyCap: (facultyId) => {
+    try {
+      const caps = storageService.getFacultyCaps();
+      delete caps[facultyId];
+      localStorage.setItem(STORAGE_KEYS.FACULTY_CAPS, JSON.stringify(caps));
+      return caps;
+    } catch (e) {
+      console.error('Failed to remove faculty capacity cap:', e);
+      return {};
+    }
+  },
+  clearAllFacultyCaps: () => {
+    try {
+      localStorage.removeItem(STORAGE_KEYS.FACULTY_CAPS);
+    } catch (e) {
+      console.error('Failed to clear all faculty capacity caps:', e);
+    }
+  },
+
   resetAllData: () => {
     save(STORAGE_KEYS.USERS, mockUsers);
     save(STORAGE_KEYS.FACULTY, mockFaculty);
@@ -145,5 +188,6 @@ export const storageService = {
     save(STORAGE_KEYS.CALENDAR, mockCalendarEvents);
     sessionStorage.removeItem(STORAGE_KEYS.CAPACITY_CAP);
     localStorage.removeItem(STORAGE_KEYS.CAPACITY_CAP);
+    localStorage.removeItem(STORAGE_KEYS.FACULTY_CAPS);
   }
 };

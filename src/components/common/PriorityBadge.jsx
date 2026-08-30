@@ -1,6 +1,8 @@
 import React from 'react';
+import { useLanguage } from '../../context/LanguageContext';
 
 export function PriorityBadge({ priority }) {
+  const { t } = useLanguage();
   const p = (priority || 'Normal').toLowerCase();
 
   if (p === 'urgent') {
@@ -13,7 +15,7 @@ export function PriorityBadge({ priority }) {
         }}
       >
         <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#ef4444' }}></span>
-        URGENT
+        {t('priority_urgent', 'URGENT')}
       </span>
     );
   }
@@ -22,7 +24,7 @@ export function PriorityBadge({ priority }) {
     return (
       <span className="badge badge-warning">
         <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#f59e0b' }}></span>
-        IMPORTANT
+        {t('priority_important', 'IMPORTANT')}
       </span>
     );
   }
@@ -30,22 +32,25 @@ export function PriorityBadge({ priority }) {
   return (
     <span className="badge badge-info">
       <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#00d2ff' }}></span>
-      NORMAL
+      {t('priority_normal', 'NORMAL')}
     </span>
   );
 }
 
 export function StatusBadge({ status }) {
-  const s = (status || '').toLowerCase();
+  const { t } = useLanguage();
+  const s = (status || '').toLowerCase().trim();
+  const key = 'status_' + s.replace(/[\s-]+/g, '_');
+  const translatedStatus = t(key, status);
   
-  if (s === 'healthy' || s === 'approved' || s === 'completed' || s === 'hired' || s === 'verified') {
-    return <span className="badge badge-success">{status}</span>;
+  if (s === 'healthy' || s === 'approved' || s === 'completed' || s === 'hired' || s === 'verified' || s === 'available' || s === 'balanced') {
+    return <span className="badge badge-success">{translatedStatus}</span>;
   }
   if (s === 'monitor' || s === 'pending' || s === 'screening' || s === 'shortlisted' || s === 'in progress') {
-    return <span className="badge badge-warning">{status}</span>;
+    return <span className="badge badge-warning">{translatedStatus}</span>;
   }
-  if (s === 'at risk' || s === 'critical' || s === 'rejected' || s === 'overloaded') {
-    return <span className="badge badge-danger">{status}</span>;
+  if (s === 'at risk' || s === 'critical' || s === 'rejected' || s === 'overloaded' || s === 'critical overload') {
+    return <span className="badge badge-danger">{translatedStatus}</span>;
   }
-  return <span className="badge badge-purple">{status}</span>;
+  return <span className="badge badge-purple">{translatedStatus}</span>;
 }

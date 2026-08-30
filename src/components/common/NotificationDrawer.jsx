@@ -1,9 +1,11 @@
 import React, { useRef, useEffect } from 'react';
 import { useNotifications } from '../../context/NotificationContext';
+import { useLanguage } from '../../context/LanguageContext';
 import { Bell, CheckCheck, Megaphone, Calendar, UserCheck, AlertTriangle, Briefcase } from 'lucide-react';
 
 export function NotificationDrawer({ isOpen, onClose, onNavigate }) {
   const { notifications, markAsRead, markAllAsRead } = useNotifications();
+  const { t } = useLanguage();
   const drawerRef = useRef(null);
 
   useEffect(() => {
@@ -51,7 +53,7 @@ export function NotificationDrawer({ isOpen, onClose, onNavigate }) {
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <Bell size={16} style={{ color: 'var(--cyan)' }} />
-          <span style={{ fontWeight: 800, fontSize: '13.5px' }}>Notifications</span>
+          <span style={{ fontWeight: 800, fontSize: '13.5px' }}>{t('notifications', 'Notifications')}</span>
         </div>
         <button
           onClick={markAllAsRead}
@@ -67,14 +69,14 @@ export function NotificationDrawer({ isOpen, onClose, onNavigate }) {
             gap: 4
           }}
         >
-          <CheckCheck size={14} /> Mark all read
+          <CheckCheck size={14} /> {t('btn_mark_all_read', 'Mark all read')}
         </button>
       </div>
 
       <div style={{ maxHeight: '380px', overflowY: 'auto', padding: '8px' }}>
         {notifications.length === 0 ? (
           <div style={{ textAlign: 'center', padding: '24px 0', color: 'var(--text-muted)', fontSize: '12.5px' }}>
-            No new notifications
+            {t('no_new_notifications', 'No new notifications')}
           </div>
         ) : (
           notifications.map((notif) => {

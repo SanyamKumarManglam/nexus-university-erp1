@@ -110,19 +110,19 @@ export function AdminCommandCenter({ onNavigate }) {
       {/* Hero Banner */}
       <div className="hero-banner">
         <div className="hero-content">
-          <h2>Welcome back, {currentUser?.name || 'Administrator'} 👋</h2>
+          <h2>{t('welcome_back', 'Welcome back')}, {currentUser?.name || 'Administrator'} 👋</h2>
           <p>
-            Nexus University Operating Platform is actively monitoring {totalFaculty} faculty members, {totalStudents} enrolled students, and institutional academic health across 4 engineering departments.
+            {t('cmd_hero_desc_prefix', 'Nexus University Operating Platform is actively monitoring')} {totalFaculty} {t('lbl_faculty_members', 'faculty members')}, {totalStudents} {t('lbl_enrolled_students', 'enrolled students')}, {t('cmd_hero_desc_suffix', 'and institutional academic health across 4 engineering departments.')}
           </p>
           <div className="hero-actions">
             <button className="btn-white" onClick={() => onNavigate('workload')}>
-              <Scale size={16} /> ⚡ {t('btn_optimize')}
+              <Scale size={16} /> ⚡ {t('btn_optimize', 'Calculate Capacity Optimization')}
             </button>
             <button className="btn-ghost" onClick={() => onNavigate('recruit')}>
-              <Briefcase size={16} /> + {t('btn_add_candidate')}
+              <Briefcase size={16} /> + {t('btn_add_candidate', 'Add Candidate')}
             </button>
             <button className="btn-ghost" onClick={() => onNavigate('leave')}>
-              <Clock size={16} /> Review Leave ({pendingTeacherLeaves + pendingStudentLeaves})
+              <Clock size={16} /> {t('btn_review_leave', 'Review Leave')} ({pendingTeacherLeaves + pendingStudentLeaves})
             </button>
           </div>
         </div>
@@ -132,10 +132,10 @@ export function AdminCommandCenter({ onNavigate }) {
       <div className="cards-grid">
         <div className="glass-card metric-card" onClick={() => onNavigate('faculty')} style={{ cursor: 'pointer' }}>
           <div>
-            <div className="metric-label">Total Faculty & Staff</div>
+            <div className="metric-label">{t('lbl_total_faculty_staff', 'Total Faculty & Staff')}</div>
             <div className="metric-value">{totalFaculty}</div>
             <div className="metric-delta delta-up">
-              <span>↑ 8 new this academic year</span>
+              <span>↑ 8 {t('lbl_new_this_year', 'new this academic year')}</span>
             </div>
           </div>
           <div className="metric-icon-box">
@@ -145,10 +145,10 @@ export function AdminCommandCenter({ onNavigate }) {
 
         <div className="glass-card metric-card" onClick={() => onNavigate('students')} style={{ cursor: 'pointer' }}>
           <div>
-            <div className="metric-label">Enrolled Students</div>
+            <div className="metric-label">{t('lbl_enrolled_students_metric', 'Enrolled Students')}</div>
             <div className="metric-value">{totalStudents}</div>
             <div className="metric-delta delta-neutral">
-              <span>Across 4 core engineering streams</span>
+              <span>{t('lbl_across_engineering_streams', 'Across 4 core engineering streams')}</span>
             </div>
           </div>
           <div className="metric-icon-box" style={{ color: 'var(--purple-light)', background: 'rgba(124, 58, 237, 0.12)' }}>
@@ -158,10 +158,10 @@ export function AdminCommandCenter({ onNavigate }) {
 
         <div className="glass-card metric-card" onClick={() => onNavigate('workload')} style={{ cursor: 'pointer' }}>
           <div>
-            <div className="metric-label">Faculty Advising Load</div>
-            <div className="metric-value">{overloadedAdvisors.length > 0 ? `${overloadedAdvisors.length} Overloaded` : 'Balanced'}</div>
+            <div className="metric-label">{t('lbl_faculty_advising_load', 'Faculty Advising Load')}</div>
+            <div className="metric-value">{overloadedAdvisors.length > 0 ? `${overloadedAdvisors.length} ${t('status_overloaded', 'Overloaded')}` : t('status_balanced', 'Balanced')}</div>
             <div className={`metric-delta ${overloadedAdvisors.length > 0 ? 'delta-down' : 'delta-up'}`}>
-              <span>{overloadedAdvisors.length > 0 ? 'Rebalancing recommended' : 'Capacity healthy (<85%)'}</span>
+              <span>{overloadedAdvisors.length > 0 ? t('lbl_urgent_rebalancing', 'Rebalancing recommended') : t('lbl_capacity_healthy', 'Capacity healthy (<85%)')}</span>
             </div>
           </div>
           <div className="metric-icon-box" style={{ color: 'var(--orange)', background: 'rgba(245, 158, 11, 0.12)' }}>
@@ -171,10 +171,10 @@ export function AdminCommandCenter({ onNavigate }) {
 
         <div className="glass-card metric-card" onClick={() => onNavigate('attendance')} style={{ cursor: 'pointer' }}>
           <div>
-            <div className="metric-label">University Attendance</div>
+            <div className="metric-label">{t('lbl_university_attendance', 'University Attendance')}</div>
             <div className="metric-value">{avgAttendance}%</div>
             <div className="metric-delta delta-up">
-              <span>↑ 3.2% vs previous semester</span>
+              <span>↑ 3.2% {t('lbl_vs_prev_semester', 'vs previous semester')}</span>
             </div>
           </div>
           <div className="metric-icon-box" style={{ color: 'var(--green)', background: 'rgba(16, 185, 129, 0.12)' }}>

@@ -17,8 +17,19 @@ export function LanguageProvider({ children }) {
   };
 
   const t = (key, fallback) => {
-    const langDict = translations[currentLang] || translations.en;
-    return langDict[key] || translations.en[key] || fallback || key;
+    if (key === null || key === undefined) return '';
+    const langDict = translations[currentLang] || translations.en || {};
+    const enDict = translations.en || {};
+
+    if (langDict[key] !== undefined) return langDict[key];
+    if (currentLang === 'en' && enDict[key] !== undefined) return enDict[key];
+
+    // Check trimmed key
+    const strKey = String(key).trim();
+    if (langDict[strKey] !== undefined) return langDict[strKey];
+    if (enDict[strKey] !== undefined) return currentLang === 'en' ? enDict[strKey] : (langDict[strKey] || fallback || strKey);
+
+    return fallback !== undefined ? fallback : key;
   };
 
   return (
